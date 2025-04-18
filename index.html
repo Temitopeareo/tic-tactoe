@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicTacToe Pro</title>
+    <!-- Telegram Web App Script -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2481cc;
+            --secondary-color: #34c759;
+            --danger-color: #ff3b30;
+            --warning-color: #ff9500;
+            --info-color: #5ac8fa;
+            --dark-color: #1c1c1e;
+            --light-color: #f2f2f7;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--tg-theme-hint-color, #cccccc);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            color: var(--tg-theme-button-color, var(--primary-color));
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 16px;
+            gap: 12px;
+        }
+
+        .nav-item {
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            background-color: var(--tg-theme-secondary-bg-color, var(--light-color));
+        }
+
+        .nav-item.active {
+            background-color: var(--tg-theme-button-color, var(--primary-color));
+            color: var(--tg-theme-button-text-color, white);
+        }
+
+        .card {
+            background-color: var(--tg-theme-secondary-bg-color, var(--light-color));
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i {
+            color: var(--tg-theme-button-color, var(--primary-color));
+        }
+
+        .players {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: var(--tg-theme-bg-color, white);
+            border-radius: var(--border-radius);
+        }
+
+        .player {
+            text-align: center;
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .player-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--tg-theme-button-color, var(--primary-color));
+            color: var(--tg-theme-button-text-color, white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .player-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .player-symbol {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--tg-theme-hint-color, #999);
+        }
+
+        .vs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--tg-theme-hint-color, #999);
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .cell {
+            aspect-ratio: 1/1;
+            background-color: var(--tg-theme-bg-color, white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: var(--transition);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .cell:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .cell.x {
+            color: var(--tg-theme-button-color, var(--primary-color));
+        }
+
+        .cell.o {
+            color: var(--danger-color);
+        }
+
+        .status {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: var(--border-radius);
+            background-color: var(--tg-theme-bg-color, white);
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: var(--tg-theme-button-color, var(--primary-color));
+            color: var(--tg-theme-button-text-color, white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            margin-bottom: 12px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .button.secondary {
+            background-color: var(--tg-theme-secondary-bg-color, var(--light-color));
+            color: var(--tg-theme-text-color, var(--dark-color));
+        }
+
+        .button.success {
+            background-color: var(--secondary-color);
+        }
+
+        .button.warning {
+            background-color: var(--warning-color);
+        }
+
+        .button.danger {
+            background-color: var(--danger-color);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .game-mode {
+            text-align: center;
+        }
+
+        .difficulty-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .back-button {
+            margin-top: 16px;
+        }
+
+        .ai-badge {
+            background-color: var(--warning-color);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .game-id-display {
+            text-align: center;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: var(--tg-theme-hint-color, #999);
+        }
+
+        .game-id-value {
+            font-weight: bold;
+            color: var(--tg-theme-text-color, var(--dark-color));
+            background-color: var(--tg-theme-bg-color, white);
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-left: 4px;
+        }
+
+        .countdown {
+            font-size: 14px;
+            color: var(--danger-color);
+            margin-left: 8px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--tg-theme-hint-color, #ccc);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--tg-theme-bg-color, white);
+            color: var(--tg-theme-text-color, var(--dark-color));
+            box-sizing: border-box;
+        }
+
+        .leaderboard {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .leaderboard th, .leaderboard td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--tg-theme-hint-color, #eee);
+        }
+
+        .leaderboard th {
+            font-weight: 600;
+            color: var(--tg-theme-hint-color, #999);
+        }
+
+        .leaderboard tr:last-child td {
+            border-bottom: none;
+        }
+
+        .rank {
+            font-weight: bold;
+            width: 40px;
+            text-align: center;
+        }
+
+        .rank-1 {
+            color: gold;
+        }
+
+        .rank-2 {
+            color: silver;
+        }
+
+        .rank-3 {
+            color: #cd7f32; /* bronze */
+        }
+
+        .points {
+            font-weight: 600;
+            color: var(--tg-theme-button-color, var(--primary-color));
+        }
+
+        .tab-content {
+            margin-top: 20px;
+        }
+
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--tg-theme-bg-color, white);
+            color: var(--tg-theme-text-color, var(--dark-color));
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .toast.success i {
+            color: var(--secondary-color);
+        }
+
+        .toast.error i {
+            color: var(--danger-color);
+        }
+
+        .toast.info i {
+            color: var(--info-color);
+        }
+
+        .online-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            margin-right: 6px;
+        }
+
+        .online-indicator.offline {
+            background-color: var(--danger-color);
+        }
+
+        .connection-status {
+            font-size: 12px;
+            color: var(--tg-theme-hint-color, #999);
+            text-align: center;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-history {
+            margin-top: 20px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background-color: var(--tg-theme-bg-color, white);
+            border-radius: var(--border-radius);
+            margin-bottom: 8px;
+        }
+
+        .history-result {
+            font-weight: 600;
+        }
+
+        .history-result.win {
+            color: var(--secondary-color);
+        }
+
+        .history-result.loss {
+            color: var(--danger-color);
+        }
+
+        .history-result.draw {
+            color: var(--warning-color);
+        }
+
+        .history-date {
+            font-size: 12px;
+            color: var(--tg-theme-hint-color, #999);
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        .tab-content.history {
+            display: none;
+        }
+
+        .nav-item.history {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .official-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 10;
+        }
+
+        .version-info {
+            text-align: center;
+            font-size: 12px;
+            color: var(--tg-theme-hint-color, #999);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <div class="official-badge">
+        <i class="fas fa-check-circle"></i> Official
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="logo"><i class="fas fa-gamepad"></i> TicTacToe Pro</h1>
+            <div class="nav">
+                <div id="nav-home" class="nav-item active"><i class="fas fa-home"></i> Home</div>
+                <div id="nav-leaderboard" class="nav-item"><i class="fas fa-trophy"></i> Leaderboard</div>
+                <div id="nav-history" class="nav-item"><i class="fas fa-history"></i> History</div>
+            </div>
+        </div>
+        
+        <div id="connection-status" class="connection-status">
+            <span id="connection-indicator" class="online-indicator offline"></span>
+            <span id="connection-text">Connecting...</span>
+        </div>
+        
+        <!-- Toast Notification -->
+        <div id="toast" class="toast">
+            <i class="fas fa-info-circle"></i>
+            <span id="toast-message"></span>
+        </div>
+        
+        <!-- Home Tab -->
+        <div id="home-tab" class="tab-content">
+            <!-- Main Menu -->
+            <div id="main-menu" class="game-mode">
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-play"></i> Choose Game Mode</h2>
+                    <button id="play-ai" class="button"><i class="fas fa-robot"></i> Play with AI</button>
+                    <button id="play-friend" class="button"><i class="fas fa-user-friends"></i> Play with Friend</button>
+                </div>
+            </div>
+            
+            <!-- AI Difficulty Selection -->
+            <div id="ai-difficulty" class="game-mode hidden">
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-cog"></i> Select AI Difficulty</h2>
+                    <div class="difficulty-options">
+                        <button id="easy-ai" class="button"><i class="fas fa-smile"></i> Easy</button>
+                        <button id="medium-ai" class="button warning"><i class="fas fa-meh"></i> Medium</button>
+                        <button id="hard-ai" class="button danger"><i class="fas fa-dizzy"></i> Hard</button>
+                    </div>
+                    <button id="back-to-menu" class="button secondary back-button"><i class="fas fa-arrow-left"></i> Back</button>
+                </div>
+            </div>
+            
+            <!-- Friend Game Setup -->
+            <div id="game-setup" class="game-setup hidden">
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-user-friends"></i> Play with Friend</h2>
+                    <button id="new-game" class="button success"><i class="fas fa-plus-circle"></i> Create New Game</button>
+                    <div class="input-group">
+                        <label for="game-id-input" class="input-label">Have a game ID? Enter it here:</label>
+                        <input type="text" id="game-id-input" class="input-field" placeholder="Enter Game ID">
+                    </div>
+                    <button id="join-game" class="button"><i class="fas fa-sign-in-alt"></i> Join Game</button>
+                    <button id="back-from-setup" class="button secondary back-button"><i class="fas fa-arrow-left"></i> Back</button>
+                </div>
+            </div>
+            
+            <!-- Game Area -->
+            <div id="game-area" class="hidden">
+                <div id="game-id-container" class="game-id-display hidden">
+                    Game ID: <span id="game-id-value" class="game-id-value"></span>
+                    <span id="expiry-countdown" class="countdown"></span>
+                </div>
+                
+                <div class="card">
+                    <div class="players">
+                        <div class="player">
+                            <div class="player-avatar">X</div>
+                            <div class="player-name" id="player1">Player 1</div>
+                            <div class="player-symbol">X</div>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            <div class="player-avatar">O</div>
+                            <div class="player-name" id="player2">Player 2</div>
+                            <div id="ai-indicator" class="hidden ai-badge"><i class="fas fa-robot"></i> AI</div>
+                            <div class="player-symbol">O</div>
+                        </div>
+                    </div>
+                    
+                    <div class="status" id="status">Waiting for opponent...</div>
+                    
+                    <div class="game-board" id="board">
+                        <div class="cell" data-index="0"></div>
+                        <div class="cell" data-index="1"></div>
+                        <div class="cell" data-index="2"></div>
+                        <div class="cell" data-index="3"></div>
+                        <div class="cell" data-index="4"></div>
+                        <div class="cell" data-index="5"></div>
+                        <div class="cell" data-index="6"></div>
+                        <div class="cell" data-index="7"></div>
+                        <div class="cell" data-index="8"></div>
+                    </div>
+                    
+                    <button id="restart" class="button success hidden"><i class="fas fa-redo"></i> Play Again</button>
+                    <button id="exit-game" class="button secondary"><i class="fas fa-sign-out-alt"></i> Exit Game</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Leaderboard Tab -->
+        <div id="leaderboard-tab" class="tab-content hidden">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-trophy"></i> Leaderboard</h2>
+                <p>Top players based on wins:</p>
+                <table class="leaderboard">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Wins</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <tr>
+                            <td colspan="3" style="text-align: center;">Loading leaderboard data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button id="refresh-leaderboard" class="button secondary" style="margin-top: 16px;">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </div>
+        
+        <!-- History Tab -->
+        <div id="history-tab" class="tab-content hidden">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-history"></i> Game History</h2>
+                <p>Your recent games:</p>
+                <div id="history-list" class="game-history">
+                    <div style="text-align: center;">Loading game history...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="version-info">
+            TicTacToe Pro v1.0.0 | Official Release
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+        import { getDatabase, ref, set, get, update, push, onValue, child, remove, serverTimestamp, query, orderByChild, limitToLast, transaction } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBAMZReJYlIcQL89CtQD6shjv8uqKmiD0c",
+            authDomain: "telegrambot-b8015.firebaseapp.com",
+            projectId: "telegrambot-b8015",
+            storageBucket: "telegrambot-b8015.firebasestorage.app",
+            messagingSenderId: "826688947798",
+            appId: "1:826688947798:web:a4d0ecac9ef9bf3c74ddf7",
+            measurementId: "G-5BELXWDZD6",
+            databaseURL: "https://telegrambot-b8015-default-rtdb.firebaseio.com"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+        
+        // Initialize Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        
+        // Game variables
+        let gameId = null;
+        let currentPlayer = null;
+        let mySymbol = null;
+        let gameState = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = false;
+        let myTurn = false;
+        let gameMode = null; // 'ai' or 'friend'
+        let aiDifficulty = null; // 'easy', 'medium', or 'hard'
+        let gameExpiryTime = null;
+        let expiryCountdownInterval = null;
+        let gameRef = null; // Firebase reference to current game
+        let userRef = null; // Firebase reference to current user
+        let leaderboardRef = null; // Firebase reference to leaderboard
+        let historyRef = null; // Firebase reference to game history
+        let userId = null;
+        let userName = null;
+        let isAuthenticated = false;
+        
+        // DOM elements
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const mainMenu = document.getElementById('main-menu');
+        const aiDifficultyMenu = document.getElementById('ai-difficulty');
+        const gameSetup = document.getElementById('game-setup');
+        const gameArea = document.getElementById('game-area');
+        const homeTab = document.getElementById('home-tab');
+        const leaderboardTab = document.getElementById('leaderboard-tab');
+        const historyTab = document.getElementById('history-tab');
+        const navHome = document.getElementById('nav-home');
+        const navLeaderboard = document.getElementById('nav-leaderboard');
+        const navHistory = document.getElementById('nav-history');
+        const player1Element = document.getElementById('player1');
+        const player2Element = document.getElementById('player2');
+        const aiIndicator = document.getElementById('ai-indicator');
+        const statusElement = document.getElementById('status');
+        const boardElement = document.getElementById('board');
+        const cells = document.querySelectorAll('.cell');
+        const gameIdContainer = document.getElementById('game-id-container');
+        const gameIdValue = document.getElementById('game-id-value');
+        const expiryCountdown = document.getElementById('expiry-countdown');
+        const gameIdInput = document.getElementById('game-id-input');
+        const leaderboardBody = document.getElementById('leaderboard-body');
+        const historyList = document.getElementById('history-list');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+        const connectionStatus = document.getElementById('connection-status');
+        const connectionIndicator = document.getElementById('connection-indicator');
+        const connectionText = document.getElementById('connection-text');
+        
+        // Buttons
+        const playAiButton = document.getElementById('play-ai');
+        const playFriendButton = document.getElementById('play-friend');
+        const easyAiButton = document.getElementById('easy-ai');
+        const mediumAiButton = document.getElementById('medium-ai');
+        const hardAiButton = document.getElementById('hard-ai');
+        const backToMenuButton = document.getElementById('back-to-menu');
+        const newGameButton = document.getElementById('new-game');
+        const joinGameButton = document.getElementById('join-game');
+        const backFromSetupButton = document.getElementById('back-from-setup');
+        const restartButton = document.getElementById('restart');
+        const exitGameButton = document.getElementById('exit-game');
+        const refreshLeaderboardButton = document.getElementById('refresh-leaderboard');
+        
+        // Initialize the game
+        function init() {
+            // Check Firebase connection status
+            const connectedRef = ref(database, '.info/connected');
+            onValue(connectedRef, (snap) => {
+                if (snap.val() === true) {
+                    connectionIndicator.classList.remove('offline');
+                    connectionText.textContent = 'Connected';
+                } else {
+                    connectionIndicator.classList.add('offline');
+                    connectionText.textContent = 'Disconnected';
+                }
+            });
+            
+            // Authenticate with Firebase (anonymous auth)
+            authenticateUser();
+            
+            // Set up event listeners for navigation
+            navHome.addEventListener('click', () => {
+                navHome.classList.add('active');
+                navLeaderboard.classList.remove('active');
+                navHistory.classList.remove('active');
+                homeTab.classList.remove('hidden');
+                leaderboardTab.classList.add('hidden');
+                historyTab.classList.add('hidden');
+            });
+            
+            navLeaderboard.addEventListener('click', () => {
+                navHome.classList.remove('active');
+                navLeaderboard.classList.add('active');
+                navHistory.classList.remove('active');
+                homeTab.classList.add('hidden');
+                leaderboardTab.classList.remove('hidden');
+                historyTab.classList.add('hidden');
+                loadLeaderboard();
+            });
+            
+            navHistory.addEventListener('click', () => {
+                navHome.classList.remove('active');
+                navLeaderboard.classList.remove('active');
+                navHistory.classList.add('active');
+                homeTab.classList.add('hidden');
+                leaderboardTab.classList.add('hidden');
+                historyTab.classList.remove('hidden');
+                loadGameHistory();
+            });
+            
+            // Set up event listeners for main menu
+            playAiButton.addEventListener('click', () => {
+                mainMenu.classList.add('hidden');
+                aiDifficultyMenu.classList.remove('hidden');
+            });
+            
+            playFriendButton.addEventListener('click', () => {
+                mainMenu.classList.add('hidden');
+                gameSetup.classList.remove('hidden');
+            });
+            
+            // Set up event listeners for AI difficulty
+            easyAiButton.addEventListener('click', () => startAiGame('easy'));
+            mediumAiButton.addEventListener('click', () => startAiGame('medium'));
+            hardAiButton.addEventListener('click', () => startAiGame('hard'));
+            backToMenuButton.addEventListener('click', () => {
+                aiDifficultyMenu.classList.add('hidden');
+                mainMenu.classList.remove('hidden');
+            });
+            
+            // Set up event listeners for friend game
+            newGameButton.addEventListener('click', createNewGame);
+            joinGameButton.addEventListener('click', () => {
+                const inputGameId = gameIdInput.value.trim().toUpperCase();
+                if (inputGameId) {
+                    joinGameById(inputGameId);
+                } else {
+                    showToast('Please enter a valid Game ID', 'error');
+                }
+            });
+            backFromSetupButton.addEventListener('click', () => {
+                gameSetup.classList.add('hidden');
+                mainMenu.classList.remove('hidden');
+            });
+            
+            // Set up event listeners for game area
+            restartButton.addEventListener('click', restartGame);
+            exitGameButton.addEventListener('click', exitGame);
+            refreshLeaderboardButton.addEventListener('click', loadLeaderboard);
+            
+            cells.forEach(cell => {
+                cell.addEventListener('click', () => {
+                    const index = cell.getAttribute('data-index');
+                    makeMove(index);
+                });
+            });
+            
+            // Check if we have a game ID in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const gameIdParam = urlParams.get('gameId');
+            
+            if (gameIdParam) {
+                // Join existing game
+                joinGameById(gameIdParam);
+            }
+        }
+        
+        // Authenticate user with Firebase
+        function authenticateUser() {
+            showLoading();
+            
+            // Get user data from Telegram
+            const user = tg.initDataUnsafe?.user || {};
+            userName = user.first_name || 'Player';
+            
+            // Use anonymous authentication for Firebase
+            signInAnonymously(auth)
+                .then((userCredential) => {
+                    // Get the Firebase user ID
+                    userId = userCredential.user.uid;
+                    
+                    // Store Telegram user info in Firebase
+                    userRef = ref(database, `users/${userId}`);
+                    update(userRef, {
+                        name: userName,
+                        telegramId: user.id || null,
+                        lastSeen: serverTimestamp()
+                    });
+                    
+                    // Set up references
+                    leaderboardRef = ref(database, 'leaderboard');
+                    historyRef = ref(database, `users/${userId}/games`);
+                    
+                    isAuthenticated = true;
+                    hideLoading();
+                    showToast('Connected to server', 'success');
+                })
+                .catch((error) => {
+                    console.error('Authentication error:', error);
+                    hideLoading();
+                    showToast('Failed to connect to server', 'error');
+                });
+        }
+        
+        // Start a game against AI
+        function startAiGame(difficulty) {
+            if (!isAuthenticated) {
+                showToast('Please wait, connecting to server...', 'error');
+                return;
+            }
+            
+            gameMode = 'ai';
+            aiDifficulty = difficulty;
+            mySymbol = 'X';
+            currentPlayer = 'X';
+            myTurn = true;
+            gameActive = true;
+            gameState = ['', '', '', '', '', '', '', '', ''];
+            
+            // Create a new game in Firebase
+            gameId = generateGameId();
+            gameRef = ref(database, `games/${gameId}`);
+            
+            const gameData = {
+                id: gameId,
+                creator: {
+                    id: userId,
+                    name: userName
+                },
+                mode: 'ai',
+                difficulty: difficulty,
+                board: gameState,
+                currentTurn: 'X',
+                status: 'playing',
+                createdAt: serverTimestamp(),
+                expiryTime: Date.now() + (60 * 60 * 1000) // 1 hour expiry
+            };
+            
+            set(gameRef, gameData)
+                .then(() => {
+                    // Update UI
+                    aiDifficultyMenu.classList.add('hidden');
+                    gameArea.classList.remove('hidden');
+                    player1Element.textContent = userName;
+                    player2Element.textContent = `AI (${difficulty})`;
+                    aiIndicator.classList.remove('hidden');
+                    statusElement.textContent = 'Your turn';
+                    gameIdContainer.classList.add('hidden');
+                    
+                    // Clear the board
+                    cells.forEach(cell => {
+                        cell.textContent = '';
+                        cell.classList.remove('x', 'o');
+                    });
+                    
+                    // Hide restart button
+                    restartButton.classList.add('hidden');
+                })
+                .catch(error => {
+                    console.error('Error creating AI game:', error);
+                    showToast('Failed to start game', 'error');
+                });
+        }
+        
+        // Create a new game with a friend
+        function createNewGame() {
+            if (!isAuthenticated) {
+                showToast('Please wait, connecting to server...', 'error');
+                return;
+            }
+            
+            showLoading();
+            
+            gameMode = 'friend';
+            gameId = generateGameId();
+            mySymbol = 'X';
+            currentPlayer = 'X';
+            myTurn = true;
+            gameActive = false; // Will be set to true when opponent joins
+            gameState = ['', '', '', '', '', '', '', '', ''];
+            
+            // Set game expiry (10 minutes from now)
+            gameExpiryTime = Date.now() + 10 * 60 * 1000;
+            
+            // Create a new game in Firebase
+            gameRef = ref(database, `games/${gameId}`);
+            
+            const gameData = {
+                id: gameId,
+                creator: {
+                    id: userId,
+                    name: userName
+                },
+                opponent: null,
+                mode: 'friend',
+                board: gameState,
+                currentTurn: 'X',
+                status: 'waiting',
+                createdAt: serverTimestamp(),
+                expiryTime: Date.now() + (10 * 60 * 1000) // 10 minutes expiry
+            };
+            
+            set(gameRef, gameData)
+                .then(() => {
+                    // Update UI
+                    gameSetup.classList.add('hidden');
+                    gameArea.classList.remove('hidden');
+                    player1Element.textContent = userName;
+                    player2Element.textContent = 'Waiting...';
+                    aiIndicator.classList.add('hidden');
+                    statusElement.textContent = 'Waiting for opponent to join...';
+                    gameIdContainer.classList.remove('hidden');
+                    gameIdValue.textContent = gameId;
+                    
+                    // Clear the board
+                    cells.forEach(cell => {
+                        cell.textContent = '';
+                        cell.classList.remove('x', 'o');
+                    });
+                    
+                    // Hide restart button
+                    restartButton.classList.add('hidden');
+                    
+                    // Start expiry countdown
+                    startExpiryCountdown();
+                    
+                    // Listen for opponent joining
+                    listenForOpponent();
+                    
+                    // Share game with a friend
+                    tg.MainButton.setText('Share Game ID');
+                    tg.MainButton.show();
+                    tg.MainButton.onClick(() => {
+                        tg.sendData(JSON.stringify({
+                            type: 'share_game',
+                            game_id: gameId
+                        }));
+                        showToast('Game ID shared!', 'success');
+                    });
+                    
+                    hideLoading();
+                })
+                .catch(error => {
+                    console.error('Error creating game:', error);
+                    showToast('Failed to create game', 'error');
+                    hideLoading();
+                });
+        }
+        
+        // Join an existing game by ID
+        function joinGameById(inputGameId) {
+            if (!isAuthenticated) {
+                showToast('Please wait, connecting to server...', 'error');
+                return;
+            }
+            
+            showLoading();
+            
+            // Validate game ID format
+            if (!inputGameId || inputGameId.length < 6) {
+                showToast('Invalid Game ID', 'error');
+                hideLoading();
+                return;
+            }
+            
+            // Check if game exists
+            const gameRef = ref(database, `games/${inputGameId}`);
+            get(gameRef)
+                .then(snapshot => {
+                    const gameData = snapshot.val();
+                    
+                    if (!gameData) {
+                        showToast('Game not found', 'error');
+                        hideLoading();
+                        return;
+                    }
+                    
+                    if (gameData.status !== 'waiting') {
+                        showToast('Game is no longer available', 'error');
+                        hideLoading();
+                        return;
+                    }
+                    
+                    if (gameData.expiryTime < Date.now()) {
+                        showToast('Game has expired', 'error');
+                        hideLoading();
+                        return;
+                    }
+                    
+                    if (gameData.creator.id === userId) {
+                        showToast('You cannot join your own game', 'error');
+                        hideLoading();
+                        return;
+                    }
+                    
+                    // Join the game
+                    gameId = inputGameId;
+                    this.gameRef = gameRef;
+                    mySymbol = 'O';
+                    currentPlayer = 'X';
+                    myTurn = false;
+                    gameActive = true;
+                    gameState = gameData.board || ['', '', '', '', '', '', '', '', ''];
+                    gameMode = 'friend';
+                    
+                    // Update game data in Firebase
+                    update(gameRef, {
+                        opponent: {
+                            id: userId,
+                            name: userName
+                        },
+                        status: 'playing',
+                        lastUpdated: serverTimestamp()
+                    })
+                    .then(() => {
+                        // Update UI
+                        mainMenu.classList.add('hidden');
+                        gameSetup.classList.add('hidden');
+                        gameArea.classList.remove('hidden');
+                        player2Element.textContent = userName;
+                        player1Element.textContent = gameData.creator.name;
+                        aiIndicator.classList.add('hidden');
+                        statusElement.textContent = "Opponent's turn";
+                        gameIdContainer.classList.add('hidden');
+                        
+                        // Clear the board
+                        cells.forEach(cell => {
+                            cell.textContent = '';
+                            cell.classList.remove('x', 'o');
+                        });
+                        
+                        // Hide restart button
+                        restartButton.classList.add('hidden');
+                        
+                        // Listen for game updates
+                        listenForGameUpdates();
+                        
+                        showToast('Joined game successfully!', 'success');
+                        hideLoading();
+                    })
+                    .catch(error => {
+                        console.error('Error joining game:', error);
+                        showToast('Failed to join game', 'error');
+                        hideLoading();
+                    });
+                })
+                .catch(error => {
+                    console.error('Error checking game:', error);
+                    showToast('Failed to check game', 'error');
+                    hideLoading();
+                });
+        }
+        
+        // Make a move
+        function makeMove(index) {
+            if (!gameActive || !myTurn || gameState[index] !== '') {
+                return;
+            }
+            
+            // Update game state locally
+            gameState[index] = mySymbol;
+            cells[index].textContent = mySymbol;
+            cells[index].classList.add(mySymbol.toLowerCase());
+            
+            // Check for win or draw
+            if (checkWin(gameState, mySymbol)) {
+                gameActive = false;
+                statusElement.textContent = 'You won!';
+                restartButton.classList.remove('hidden');
+                
+                if (gameMode === 'ai') {
+                    // Update game in Firebase
+                    update(gameRef, {
+                        board: gameState,
+                        status: 'finished',
+                        winner: userId,
+                        lastUpdated: serverTimestamp()
+                    });
+                    
+                    // Update leaderboard
+                    updateLeaderboard();
+                    
+                    // Add to game history
+                    addGameToHistory('win', 'ai', aiDifficulty);
+                } else {
+                    // Update game in Firebase
+                    update(gameRef, {
+                        board: gameState,
+                        status: 'finished',
+                        winner: userId,
+                        lastUpdated: serverTimestamp()
+                    });
+                    
+                    // Update leaderboard
+                    updateLeaderboard();
+                    
+                    // Add to game history
+                    addGameToHistory('win', 'friend');
+                }
+                
+                return;
+            }
+            
+            if (checkDraw(gameState)) {
+                gameActive = false;
+                statusElement.textContent = 'Game ended in a draw!';
+                restartButton.classList.remove('hidden');
+                
+                // Update game in Firebase
+                update(gameRef, {
+                    board: gameState,
+                    status: 'finished',
+                    winner: 'draw',
+                    lastUpdated: serverTimestamp()
+                });
+                
+                // Add to game history
+                if (gameMode === 'ai') {
+                    addGameToHistory('draw', 'ai', aiDifficulty);
+                } else {
+                    addGameToHistory('draw', 'friend');
+                }
+                
+                return;
+            }
+            
+            // Switch turns
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            myTurn = false;
+            statusElement.textContent = "Opponent's turn";
+            
+            if (gameMode === 'ai') {
+                // Update game in Firebase
+                update(gameRef, {
+                    board: gameState,
+                    currentTurn: currentPlayer,
+                    lastUpdated: serverTimestamp()
+                });
+                
+                // AI's turn
+                setTimeout(() => {
+                    makeAiMove();
+                }, 800);
+            } else {
+                // Update game in Firebase
+                update(gameRef, {
+                    board: gameState,
+                    currentTurn: currentPlayer,
+                    lastUpdated: serverTimestamp()
+                });
+            }
+        }
+        
+        // AI makes a move
+        function makeAiMove() {
+            if (!gameActive) return;
+            
+            const aiSymbol = mySymbol === 'X' ? 'O' : 'X';
+            let moveIndex;
+            
+            switch (aiDifficulty) {
+                case 'easy':
+                    moveIndex = makeRandomMove();
+                    break;
+                case 'medium':
+                    moveIndex = makeMediumMove(aiSymbol);
+                    break;
+                case 'hard':
+                    moveIndex = makeHardMove(aiSymbol);
+                    break;
+                default:
+                    moveIndex = makeRandomMove();
+            }
+            
+            // Update game state
+            gameState[moveIndex] = aiSymbol;
+            cells[moveIndex].textContent = aiSymbol;
+            cells[moveIndex].classList.add(aiSymbol.toLowerCase());
+            
+            // Check for win or draw
+            if (checkWin(gameState, aiSymbol)) {
+                gameActive = false;
+                statusElement.textContent = 'AI won!';
+                restartButton.classList.remove('hidden');
+                
+                // Update game in Firebase
+                update(gameRef, {
+                    board: gameState,
+                    status: 'finished',
+                    winner: 'ai',
+                    lastUpdated: serverTimestamp()
+                });
+                
+                // Add to game history
+                addGameToHistory('loss', 'ai', aiDifficulty);
+                
+                return;
+            }
+            
+            if (checkDraw(gameState)) {
+                gameActive = false;
+                statusElement.textContent = 'Game ended in a draw!';
+                restartButton.classList.remove('hidden');
+                
+                // Update game in Firebase
+                update(gameRef, {
+                    board: gameState,
+                    status: 'finished',
+                    winner: 'draw',
+                    lastUpdated: serverTimestamp()
+                });
+                
+                // Add to game history
+                addGameToHistory('draw', 'ai', aiDifficulty);
+                
+                return;
+            }
+            
+            // Switch turns
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            myTurn = true;
+            statusElement.textContent = 'Your turn';
+            
+            // Update game in Firebase
+            update(gameRef, {
+                board: gameState,
+                currentTurn: currentPlayer,
+                lastUpdated: serverTimestamp()
+            });
+        }
+        
+        // AI difficulty: Easy - Random move
+        function makeRandomMove() {
+            const availableIndices = gameState
+                .map((val, idx) => val === '' ? idx : null)
+                .filter(idx => idx !== null);
+            
+            return availableIndices[Math.floor(Math.random() * availableIndices.length)];
+        }
+        
+        // AI difficulty: Medium - Block opponent or make random move
+        function makeMediumMove(aiSymbol) {
+            const playerSymbol = aiSymbol === 'X' ? 'O' : 'X';
+            
+            // Check if AI can win
+            const winningMove = findWinningMove(gameState, aiSymbol);
+            if (winningMove !== null) {
+                return winningMove;
+            }
+            
+            // Check if player can win and block
+            const blockingMove = findWinningMove(gameState, playerSymbol);
+            if (blockingMove !== null) {
+                return blockingMove;
+            }
+            
+            // Take center if available
+            if (gameState[4] === '') {
+                return 4;
+            }
+            
+            // Make a random move
+            return makeRandomMove();
+        }
+        
+        // AI difficulty: Hard - Strategic play
+        function makeHardMove(aiSymbol) {
+            const playerSymbol = aiSymbol === 'X' ? 'O' : 'X';
+            
+            // Check if AI can win
+            const winningMove = findWinningMove(gameState, aiSymbol);
+            if (winningMove !== null) {
+                return winningMove;
+            }
+            
+            // Check if player can win and block
+            const blockingMove = findWinningMove(gameState, playerSymbol);
+            if (blockingMove !== null) {
+                return blockingMove;
+            }
+            
+            // Take center if available
+            if (gameState[4] === '') {
+                return 4;
+            }
+            
+            // Take corners if available
+            const corners = [0, 2, 6, 8];
+            const availableCorners = corners.filter(idx => gameState[idx] === '');
+            if (availableCorners.length > 0) {
+                return availableCorners[Math.floor(Math.random() * availableCorners.length)];
+            }
+            
+            // Take sides if available
+            const sides = [1, 3, 5, 7];
+            const availableSides = sides.filter(idx => gameState[idx] === '');
+            if (availableSides.length > 0) {
+                return availableSides[Math.floor(Math.random() * availableSides.length)];
+            }
+            
+            // Make a random move (shouldn't reach here)
+            return makeRandomMove();
+        }
+        
+        // Find a winning move for the given symbol
+        function findWinningMove(board, symbol) {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+                [0, 4, 8], [2, 4, 6]             // diagonals
+            ];
+            
+            for (const pattern of winPatterns) {
+                const [a, b, c] = pattern;
+                // Check if two positions have the symbol and the third is empty
+                if (board[a] === symbol && board[b] === symbol && board[c] === '') {
+                    return c;
+                }
+                if (board[a] === symbol && board[c] === symbol && board[b] === '') {
+                    return b;
+                }
+                if (board[b] === symbol && board[c] === symbol && board[a] === '') {
+                    return a;
+                }
+            }
+            
+            return null;
+        }
+        
+        // Check for a win
+        function checkWin(board, symbol) {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+                [0, 4, 8], [2, 4, 6]             // diagonals
+            ];
+            
+            return winPatterns.some(pattern => {
+                return pattern.every(index => board[index] === symbol);
+            });
+        }
+        
+        // Check for a draw
+        function checkDraw(board) {
+            return board.every(cell => cell !== '');
+        }
+        
+        // Restart the game
+        function restartGame() {
+            if (gameMode === 'ai') {
+                // Create a new AI game with the same difficulty
+                startAiGame(aiDifficulty);
+            } else {
+                // For multiplayer, create a new game
+                createNewGame();
+            }
+        }
+        
+        // Exit the game
+        function exitGame() {
+            // Clear any intervals
+            if (expiryCountdownInterval) {
+                clearInterval(expiryCountdownInterval);
+                expiryCountdownInterval = null;
+            }
+            
+            // If in a multiplayer game, update status
+            if (gameRef && gameMode === 'friend' && gameActive) {
+                update(gameRef, {
+                    status: 'abandoned',
+                    lastUpdated: serverTimestamp()
+                });
+            }
+            
+            // Unsubscribe from Firebase listeners
+            if (gameRef) {
+                // Remove the onValue listener
+                const gameRefPath = gameRef.toString();
+                const listeners = onValue._callbacks || {};
+                if (listeners[gameRefPath]) {
+                    listeners[gameRefPath].forEach(callback => {
+                        callback.off();
+                    });
+                }
+                gameRef = null;
+            }
+            
+            // Reset game state
+            gameState = ['', '', '', '', '', '', '', '', ''];
+            gameActive = false;
+            gameMode = null;
+            aiDifficulty = null;
+            
+            // Update UI
+            gameArea.classList.add('hidden');
+            mainMenu.classList.remove('hidden');
+            
+            // Hide Telegram main button
+            tg.MainButton.hide();
+            
+            gameId = null;
+        }
+        
+        // Generate a random game ID
+        function generateGameId() {
+            return Math.random().toString(36).substring(2, 8).toUpperCase();
+        }
+        
+        // Start the expiry countdown
+        function startExpiryCountdown() {
+            if (expiryCountdownInterval) {
+                clearInterval(expiryCountdownInterval);
+                expiryCountdownInterval = null;
+            }
+            
+            expiryCountdownInterval = setInterval(() => {
+                const now = Date.now();
+                const timeLeft = gameExpiryTime - now;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(expiryCountdownInterval);
+                    expiryCountdown.textContent = '(Expired)';
+                    
+                    if (!gameActive) {
+                        showToast('Game expired. No opponent joined.', 'error');
+                        setTimeout(exitGame, 3000);
+                    }
+                } else {
+                    const minutes = Math.floor(timeLeft / 60000);
+                    const seconds = Math.floor((timeLeft % 60000) / 1000);
+                    expiryCountdown.textContent = `(Expires in ${minutes}:${seconds.toString().padStart(2, '0')})`;
+                }
+            }, 1000);
+        }
+        
+        // Listen for opponent joining
+        function listenForOpponent() {
+            onValue(gameRef, snapshot => {
+                const gameData = snapshot.val();
+                
+                if (!gameData) {
+                    showToast('Game no longer exists', 'error');
+                    exitGame();
+                    return;
+                }
+                
+                if (gameData.status === 'playing' && gameData.opponent) {
+                    // Opponent joined
+                    player2Element.textContent = gameData.opponent.name;
+                    gameActive = true;
+                    statusElement.textContent = 'Your turn';
+                    
+                    showToast('Opponent joined the game!', 'success');
+                    
+                    // Stop listening for opponent and start listening for game updates
+                    // Remove the onValue listener
+                    const gameRefPath = gameRef.toString();
+                    const listeners = onValue._callbacks || {};
+                    if (listeners[gameRefPath]) {
+                        listeners[gameRefPath].forEach(callback => {
+                            callback.off();
+                        });
+                    }
+                    listenForGameUpdates();
+                }
+            });
+        }
+        
+        // Listen for game updates
+        function listenForGameUpdates() {
+            onValue(gameRef, snapshot => {
+                const gameData = snapshot.val();
+                
+                if (!gameData) {
+                    showToast('Game no longer exists', 'error');
+                    exitGame();
+                    return;
+                }
+                
+                // Update game state
+                gameState = gameData.board;
+                currentPlayer = gameData.currentTurn;
+                myTurn = (currentPlayer === 'X' && mySymbol === 'X') || (currentPlayer === 'O' && mySymbol === 'O');
+                
+                // Update board UI
+                for (let i = 0; i < 9; i++) {
+                    cells[i].textContent = gameState[i];
+                    cells[i].className = 'cell';
+                    if (gameState[i] === 'X') {
+                        cells[i].classList.add('x');
+                    } else if (gameState[i] === 'O') {
+                        cells[i].classList.add('o');
+                    }
+                }
+                
+                // Update status
+                if (gameData.status === 'finished') {
+                    gameActive = false;
+                    
+                    if (gameData.winner === userId) {
+                        statusElement.textContent = 'You won!';
+                    } else if (gameData.winner === 'draw') {
+                        statusElement.textContent = 'Game ended in a draw!';
+                    } else {
+                        statusElement.textContent = 'Opponent won!';
+                        
+                        // Add to game history if not already added
+                        if (gameMode === 'friend') {
+                            addGameToHistory('loss', 'friend');
+                        }
+                    }
+                    
+                    restartButton.classList.remove('hidden');
+                } else if (gameData.status === 'abandoned') {
+                    gameActive = false;
+                    statusElement.textContent = 'Opponent left the game';
+                    restartButton.classList.remove('hidden');
+                } else {
+                    statusElement.textContent = myTurn ? 'Your turn' : "Opponent's turn";
+                }
+            });
+        }
+        
+        // Update leaderboard with new win
+        function updateLeaderboard() {
+            const leaderboardUserRef = ref(database, `leaderboard/${userId}`);
+            
+            runTransaction(leaderboardUserRef, (userData) => {
+                if (userData === null) {
+                    return {
+                        name: userName,
+                        wins: 1,
+                        lastWin: serverTimestamp()
+                    };
+                } else {
+                    return {
+                        name: userName,
+                        wins: (userData.wins || 0) + 1,
+                        lastWin: serverTimestamp()
+                    };
+                }
+            });
+        }
+        
+        // Add game to history
+        function addGameToHistory(result, opponent, difficulty = null) {
+            const newGameRef = push(historyRef);
+            
+            const historyData = {
+                result: result,
+                opponent: opponent,
+                difficulty: difficulty,
+                timestamp: serverTimestamp(),
+                gameId: gameId
+            };
+            
+            set(newGameRef, historyData);
+        }
+        
+        // Load leaderboard data
+        function loadLeaderboard() {
+            const leaderboardQuery = query(leaderboardRef, orderByChild('wins'), limitToLast(20));
+            get(leaderboardQuery)
+                .then(snapshot => {
+                    const leaderboardData = [];
+                    
+                    // Convert to array and add key as id
+                    snapshot.forEach(childSnapshot => {
+                        leaderboardData.push({
+                            id: childSnapshot.key,
+                            ...childSnapshot.val()
+                        });
+                    });
+                    
+                    // Sort by wins (descending)
+                    leaderboardData.sort((a, b) => b.wins - a.wins);
+                    
+                    // Clear current leaderboard
+                    leaderboardBody.innerHTML = '';
+                    
+                    if (leaderboardData.length === 0) {
+                        leaderboardBody.innerHTML = '<tr><td colspan="3" style="text-align: center;">No data available yet</td></tr>';
+                        return;
+                    }
+                    
+                    // Add entries to leaderboard
+                    leaderboardData.forEach((entry, index) => {
+                        const row = document.createElement('tr');
+                        
+                        // Rank cell with special styling for top 3
+                        const rankCell = document.createElement('td');
+                        rankCell.className = 'rank';
+                        if (index < 3) {
+                            rankCell.classList.add(`rank-${index + 1}`);
+                        }
+                        rankCell.textContent = index + 1;
+                        
+                        // Name cell
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = entry.name;
+                        if (entry.id === userId) {
+                            nameCell.innerHTML += ' <span style="font-size: 12px;">(You)</span>';
+                        }
+                        
+                        // Wins cell
+                        const winsCell = document.createElement('td');
+                        winsCell.className = 'points';
+                        winsCell.textContent = entry.wins;
+                        
+                        row.appendChild(rankCell);
+                        row.appendChild(nameCell);
+                        row.appendChild(winsCell);
+                        
+                        leaderboardBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading leaderboard:', error);
+                    leaderboardBody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Error loading leaderboard</td></tr>';
+                });
+        }
+        
+        // Load game history
+        function loadGameHistory() {
+            const historyQuery = query(historyRef, orderByChild('timestamp'), limitToLast(10));
+            get(historyQuery)
+                .then(snapshot => {
+                    const historyData = [];
+                    
+                    // Convert to array and add key as id
+                    snapshot.forEach(childSnapshot => {
+                        historyData.push({
+                            id: childSnapshot.key,
+                            ...childSnapshot.val()
+                        });
+                    });
+                    
+                    // Sort by timestamp (descending)
+                    historyData.sort((a, b) => b.timestamp - a.timestamp);
+                    
+                    // Clear current history
+                    historyList.innerHTML = '';
+                    
+                    if (historyData.length === 0) {
+                        historyList.innerHTML = '<div style="text-align: center;">No game history available yet</div>';
+                        return;
+                    }
+                    
+                    // Add entries to history
+                    historyData.forEach(game => {
+                        const historyItem = document.createElement('div');
+                        historyItem.className = 'history-item';
+                        
+                        const opponentText = game.opponent === 'ai' 
+                            ? `AI (${game.difficulty})` 
+                            : 'Friend';
+                        
+                        const resultClass = game.result === 'win' 
+                            ? 'win' 
+                            : game.result === 'loss' 
+                                ? 'loss' 
+                                : 'draw';
+                        
+                        const resultText = game.result === 'win' 
+                            ? 'Won' 
+                            : game.result === 'loss' 
+                                ? 'Lost' 
+                                : 'Draw';
+                        
+                        const date = new Date(game.timestamp);
+                        const dateText = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                        
+                        historyItem.innerHTML = `
+                            <div>
+                                <div>vs ${opponentText}</div>
+                                <div class="history-date">${dateText}</div>
+                            </div>
+                            <div class="history-result ${resultClass}">${resultText}</div>
+                        `;
+                        
+                        historyList.appendChild(historyItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading game history:', error);
+                    historyList.innerHTML = '<div style="text-align: center;">Error loading game history</div>';
+                });
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            toastMessage.textContent = message;
+            toast.className = 'toast show ' + type;
+            
+            // Add appropriate icon
+            let icon = 'fa-info-circle';
+            if (type === 'success') icon = 'fa-check-circle';
+            if (type === 'error') icon = 'fa-exclamation-circle';
+            
+            toast.querySelector('i').className = `fas ${icon}`;
+            
+            setTimeout(() => {
+                toast.className = 'toast';
+            }, 3000);
+        }
+        
+        // Show loading overlay
+        function showLoading() {
+            loadingOverlay.style.display = 'flex';
+        }
+        
+        // Hide loading overlay
+        function hideLoading() {
+            loadingOverlay.style.display = 'none';
+        }
+        
+        // Helper function for Firebase transactions
+        function runTransaction(ref, updateFn) {
+            return new Promise((resolve, reject) => {
+                const onComplete = (error, committed, snapshot) => {
+                    if (error) {
+                        reject(error);
+                    } else if (!committed) {
+                        reject(new Error('Transaction was aborted'));
+                    } else {
+                        resolve(snapshot);
+                    }
+                };
+                
+                transaction(ref, updateFn).then(resolve).catch(reject);
+            });
+        }
+        
+        // Initialize the game when document is ready
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
