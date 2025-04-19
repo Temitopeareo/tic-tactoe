@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TicTacToe Pro</title>
+    <title>Game Hub Pro</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- Firebase App (the core Firebase SDK) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -49,6 +49,7 @@
             transition: all var(--transition-speed) ease;
             overflow-x: hidden;
             line-height: 1.5;
+            padding-bottom: 70px; /* Space for bottom navigation */
         }
 
         .container {
@@ -686,7 +687,7 @@
 
         .connection-status {
             position: fixed;
-            bottom: 16px;
+            bottom: 80px; /* Adjusted to be above bottom navigation */
             right: 16px;
             font-size: 12px;
             padding: 8px 12px;
@@ -768,6 +769,358 @@
         .game-id-display.visible {
             display: block;
             animation: fadeIn 0.5s;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            color: var(--tg-theme-hint-color, #999999);
+            font-size: 12px;
+            font-weight: 500;
+            transition: all var(--transition-speed) ease;
+            cursor: pointer;
+            width: 20%;
+            text-align: center;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        /* Game selection */
+        .game-selection {
+            display: none;
+            margin-bottom: 24px;
+        }
+
+        .game-selection.visible {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .game-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-bottom: 16px;
+            box-shadow: var(--box-shadow);
+            transition: all var(--transition-speed) ease;
+            cursor: pointer;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .game-card-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .game-card-content {
+            padding: 16px;
+        }
+
+        .game-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .game-card-description {
+            color: var(--tg-theme-hint-color, #999999);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .game-card-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--tg-theme-hint-color, #999999);
+        }
+
+        /* RPS Game Styles */
+        .rps-container {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .rps-container.visible {
+            display: block;
+        }
+
+        .rps-choices {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            gap: 12px;
+        }
+
+        .rps-choice {
+            flex: 1;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rps-choice:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .rps-choice.selected {
+            background-color: rgba(51, 144, 236, 0.2);
+            border: 2px solid var(--primary-color);
+        }
+
+        .rps-choice.win {
+            background-color: rgba(76, 175, 80, 0.2);
+            border: 2px solid var(--success-color);
+        }
+
+        .rps-choice.lose {
+            background-color: rgba(244, 67, 54, 0.2);
+            border: 2px solid var(--error-color);
+        }
+
+        .rps-choice i {
+            font-size: 48px;
+            color: var(--tg-theme-text-color, #000000);
+        }
+
+        .rps-result {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            gap: 12px;
+        }
+
+        .rps-player, .rps-computer {
+            flex: 1;
+            text-align: center;
+        }
+
+        .rps-vs {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--tg-theme-hint-color, #999999);
+        }
+
+        .rps-choice-display {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .rps-choice-display i {
+            font-size: 40px;
+        }
+
+        .rps-choice-label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Notifications */
+        .notifications-container {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .notifications-container.visible {
+            display: block;
+        }
+
+        .notification-item {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .notification-message {
+            color: var(--tg-theme-text-color, #000000);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .notification-time {
+            color: var(--tg-theme-hint-color, #999999);
+            font-size: 12px;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .notification-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .notification-btn.primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .notification-btn.secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        /* Profile */
+        .profile-container {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .profile-container.visible {
+            display: block;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            margin: 0 auto 16px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-username {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .profile-fullname {
+            color: var(--tg-theme-hint-color, #999999);
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .profile-stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .profile-stat-item {
+            text-align: center;
+        }
+
+        .profile-stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .profile-stat-label {
+            font-size: 14px;
+            color: var(--tg-theme-hint-color, #999999);
+        }
+
+        .profile-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         /* Animations */
@@ -854,7 +1207,9 @@
         button:focus-visible,
         input:focus-visible,
         .cell:focus-visible,
-        .tab:focus-visible {
+        .tab:focus-visible,
+        .nav-item:focus-visible,
+        .rps-choice:focus-visible {
             outline: 3px solid var(--primary-color);
             outline-offset: 2px;
         }
@@ -862,7 +1217,7 @@
         /* Debug panel for development */
         .debug-panel {
             position: fixed;
-            bottom: 0;
+            bottom: 70px; /* Adjusted to be above bottom navigation */
             left: 0;
             right: 0;
             background-color: rgba(0, 0, 0, 0.8);
@@ -896,6 +1251,14 @@
             .history-item {
                 background-color: #333;
             }
+
+            .game-card {
+                background-color: #333;
+            }
+
+            .notification-item {
+                background-color: #333;
+            }
         }
 
         /* Responsive adjustments */
@@ -925,127 +1288,391 @@
             .profile-stats {
                 font-size: 12px;
             }
+
+            .rps-choice i {
+                font-size: 36px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>TicTacToe Pro</h1>
-            <div class="badge">OFFICIAL</div>
-            <div class="version">v2.0.0</div>
-        </div>
-
-        <div class="error-message" id="errorMessage"></div>
-        <div class="success-message" id="successMessage"></div>
-
-        <div class="profile-section" id="profileSection">
-            <div class="profile-avatar" id="profileAvatar">
-                <i class="fas fa-user"></i>
+    <div class="container" id="mainContainer">
+        <!-- Dashboard Section -->
+        <div id="dashboardSection" class="section-container visible">
+            <div class="header">
+                <h1>Game Hub Pro</h1>
+                <div class="badge">OFFICIAL</div>
+                <div class="version">v2.0.0</div>
             </div>
-            <div class="profile-info">
-                <div class="profile-name" id="profileName">Player</div>
-                <div class="profile-stats">
-                    <div class="stat">
-                        <i class="fas fa-trophy"></i>
-                        <span class="stat-value" id="statWins">0</span> Wins
+
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+
+            <div class="profile-section" id="profileSection">
+                <div class="profile-avatar" id="profileAvatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-name" id="profileName">Player</div>
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <i class="fas fa-trophy"></i>
+                            <span class="stat-value" id="statWins">0</span> Wins
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-gamepad"></i>
+                            <span class="stat-value" id="statGames">0</span> Games
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-percentage"></i>
+                            <span class="stat-value" id="statWinRate">0%</span>
+                        </div>
                     </div>
-                    <div class="stat">
-                        <i class="fas fa-gamepad"></i>
-                        <span class="stat-value" id="statGames">0</span> Games
+                </div>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" id="recentGamesTab" role="tab" aria-selected="true" tabindex="0">
+                    <i class="fas fa-clock"></i> Recent Games
+                </div>
+                <div class="tab" id="statsTab" role="tab" aria-selected="false" tabindex="0">
+                    <i class="fas fa-chart-bar"></i> Stats
+                </div>
+            </div>
+
+            <div class="tab-content active" id="recentGamesContent" role="tabpanel" aria-labelledby="recentGamesTab">
+                <div class="history">
+                    <h2><i class="fas fa-history"></i> Recent Activity</h2>
+                    <div id="dashboardHistoryLoading" class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading recent games...</p>
                     </div>
-                    <div class="stat">
-                        <i class="fas fa-percentage"></i>
-                        <span class="stat-value" id="statWinRate">0%</span>
+                    <ul class="history-list" id="dashboardHistoryList"></ul>
+                </div>
+            </div>
+
+            <div class="tab-content" id="statsContent" role="tabpanel" aria-labelledby="statsTab">
+                <div class="leaderboard">
+                    <h2><i class="fas fa-chart-line"></i> Your Statistics</h2>
+                    <div class="profile-stats-row">
+                        <div class="profile-stat-item">
+                            <div class="profile-stat-value" id="tttWins">0</div>
+                            <div class="profile-stat-label">TicTacToe Wins</div>
+                        </div>
+                        <div class="profile-stat-item">
+                            <div class="profile-stat-value" id="rpsWins">0</div>
+                            <div class="profile-stat-label">RPS Wins</div>
+                        </div>
+                    </div>
+                    <div class="profile-stats-row">
+                        <div class="profile-stat-item">
+                            <div class="profile-stat-value" id="totalGames">0</div>
+                            <div class="profile-stat-label">Total Games</div>
+                        </div>
+                        <div class="profile-stat-item">
+                            <div class="profile-stat-value" id="overallWinRate">0%</div>
+                            <div class="profile-stat-label">Win Rate</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="game-modes">
-            <button class="mode-btn active" id="aiMode" aria-label="Play with AI">
-                <i class="fas fa-robot"></i> Play with AI
-            </button>
-            <button class="mode-btn" id="friendMode" aria-label="Play with Friend">
-                <i class="fas fa-user-friends"></i> Play with Friend
-            </button>
-        </div>
-
-        <div class="difficulty-selector" id="difficultySelector">
-            <h3>Select Difficulty</h3>
-            <div class="difficulty-buttons">
-                <button class="difficulty-btn" data-difficulty="easy" aria-label="Easy difficulty">Easy</button>
-                <button class="difficulty-btn active" data-difficulty="medium" aria-label="Medium difficulty">Medium</button>
-                <button class="difficulty-btn" data-difficulty="hard" aria-label="Hard difficulty">Hard</button>
+        <!-- Games Section -->
+        <div id="gamesSection" class="section-container game-selection">
+            <div class="header">
+                <h1>Games</h1>
+                <div class="badge">PLAY</div>
+                <div class="version">v2.0.0</div>
             </div>
-        </div>
 
-        <div class="game-id-container" id="gameIdContainer">
-            <h3>Multiplayer Game</h3>
-            <input type="text" class="game-id-input" id="gameIdInput" placeholder="Enter Game ID" maxlength="6" aria-label="Game ID input">
-            <button class="game-id-btn" id="joinGameBtn" aria-label="Join Game">
-                <i class="fas fa-sign-in-alt"></i> Join Game
-            </button>
-            <button class="game-id-btn" id="createGameBtn" aria-label="Create New Game">
-                <i class="fas fa-plus-circle"></i> Create New Game
-            </button>
-            <div class="game-id-display" id="gameIdDisplay"></div>
-        </div>
-
-        <div class="status" id="status">X's turn</div>
-
-        <div class="board-container">
-            <div class="board" id="board">
-                <div class="cell" data-index="0" tabindex="0" role="button" aria-label="Cell 1, empty"></div>
-                <div class="cell" data-index="1" tabindex="0" role="button" aria-label="Cell 2, empty"></div>
-                <div class="cell" data-index="2" tabindex="0" role="button" aria-label="Cell 3, empty"></div>
-                <div class="cell" data-index="3" tabindex="0" role="button" aria-label="Cell 4, empty"></div>
-                <div class="cell" data-index="4" tabindex="0" role="button" aria-label="Cell 5, empty"></div>
-                <div class="cell" data-index="5" tabindex="0" role="button" aria-label="Cell 6, empty"></div>
-                <div class="cell" data-index="6" tabindex="0" role="button" aria-label="Cell 7, empty"></div>
-                <div class="cell" data-index="7" tabindex="0" role="button" aria-label="Cell 8, empty"></div>
-                <div class="cell" data-index="8" tabindex="0" role="button" aria-label="Cell 9, empty"></div>
-            </div>
-        </div>
-
-        <div class="actions">
-            <button class="action-btn secondary" id="resetBtn" aria-label="Reset Game">
-                <i class="fas fa-redo"></i> Reset
-            </button>
-            <button class="action-btn" id="shareBtn" aria-label="Share Game">
-                <i class="fas fa-share-alt"></i> Share
-            </button>
-        </div>
-
-        <div class="tabs">
-            <div class="tab active" id="leaderboardTab" role="tab" aria-selected="true" tabindex="0">
-                <i class="fas fa-trophy"></i> Leaderboard
-            </div>
-            <div class="tab" id="historyTab" role="tab" aria-selected="false" tabindex="0">
-                <i class="fas fa-history"></i> History
-            </div>
-        </div>
-
-        <div class="tab-content active" id="leaderboardContent" role="tabpanel" aria-labelledby="leaderboardTab">
-            <div class="leaderboard">
-                <h2><i class="fas fa-trophy"></i> Top Players</h2>
-                <div id="leaderboardLoading" class="loading">
-                    <div class="spinner"></div>
-                    <p>Loading leaderboard...</p>
+            <div class="game-card" id="tttGameCard">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Untitled%20design-zWkSmusLor0HbN7WC22GkxIvaJYkes.png" alt="TicTacToe Game" class="game-card-image">
+                <div class="game-card-content">
+                    <div class="game-card-title">
+                        <i class="fas fa-th"></i> TicTacToe Pro
+                    </div>
+                    <div class="game-card-description">
+                        Classic game of X's and O's with AI and multiplayer modes.
+                    </div>
+                    <div class="game-card-stats">
+                        <span><i class="fas fa-trophy"></i> <span id="tttCardWins">0</span> Wins</span>
+                        <span><i class="fas fa-gamepad"></i> <span id="tttCardGames">0</span> Games</span>
+                    </div>
                 </div>
-                <ul class="leaderboard-list" id="leaderboardList"></ul>
+            </div>
+
+            <div class="game-card" id="rpsGameCard">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Untitled%20design-i8JMGvQ3fJGs7fNVHSPsy2KaIcdyee.png" alt="Rock Paper Scissors Game" class="game-card-image">
+                <div class="game-card-content">
+                    <div class="game-card-title">
+                        <i class="fas fa-hand-rock"></i> Rock Paper Scissors
+                    </div>
+                    <div class="game-card-description">
+                        Test your luck and strategy in this classic hand game.
+                    </div>
+                    <div class="game-card-stats">
+                        <span><i class="fas fa-trophy"></i> <span id="rpsCardWins">0</span> Wins</span>
+                        <span><i class="fas fa-gamepad"></i> <span id="rpsCardGames">0</span> Games</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="tab-content" id="historyContent" role="tabpanel" aria-labelledby="historyTab">
-            <div class="history">
-                <h2><i class="fas fa-history"></i> Recent Games</h2>
-                <div id="historyLoading" class="loading">
-                    <div class="spinner"></div>
-                    <p>Loading game history...</p>
-                </div>
-                <ul class="history-list" id="historyList"></ul>
+        <!-- TicTacToe Game Section -->
+        <div id="tttGameSection" class="section-container">
+            <div class="header">
+                <h1>TicTacToe Pro</h1>
+                <div class="badge">GAME</div>
+                <div class="version">v2.0.0</div>
             </div>
+
+            <div class="game-modes">
+                <button class="mode-btn active" id="aiMode" aria-label="Play with AI">
+                    <i class="fas fa-robot"></i> Play with AI
+                </button>
+                <button class="mode-btn" id="friendMode" aria-label="Play with Friend">
+                    <i class="fas fa-user-friends"></i> Play with Friend
+                </button>
+            </div>
+
+            <div class="difficulty-selector" id="difficultySelector">
+                <h3>Select Difficulty</h3>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-btn" data-difficulty="easy" aria-label="Easy difficulty">Easy</button>
+                    <button class="difficulty-btn active" data-difficulty="medium" aria-label="Medium difficulty">Medium</button>
+                    <button class="difficulty-btn" data-difficulty="hard" aria-label="Hard difficulty">Hard</button>
+                </div>
+            </div>
+
+            <div class="game-id-container" id="gameIdContainer">
+                <h3>Multiplayer Game</h3>
+                <input type="text" class="game-id-input" id="gameIdInput" placeholder="Enter Game ID" maxlength="6" aria-label="Game ID input">
+                <button class="game-id-btn" id="joinGameBtn" aria-label="Join Game">
+                    <i class="fas fa-sign-in-alt"></i> Join Game
+                </button>
+                <button class="game-id-btn" id="createGameBtn" aria-label="Create New Game">
+                    <i class="fas fa-plus-circle"></i> Create New Game
+                </button>
+                <div class="game-id-display" id="gameIdDisplay"></div>
+            </div>
+
+            <div class="status" id="status">X's turn</div>
+
+            <div class="board-container">
+                <div class="board" id="board">
+                    <div class="cell" data-index="0" tabindex="0" role="button" aria-label="Cell 1, empty"></div>
+                    <div class="cell" data-index="1" tabindex="0" role="button" aria-label="Cell 2, empty"></div>
+                    <div class="cell" data-index="2" tabindex="0" role="button" aria-label="Cell 3, empty"></div>
+                    <div class="cell" data-index="3" tabindex="0" role="button" aria-label="Cell 4, empty"></div>
+                    <div class="cell" data-index="4" tabindex="0" role="button" aria-label="Cell 5, empty"></div>
+                    <div class="cell" data-index="5" tabindex="0" role="button" aria-label="Cell 6, empty"></div>
+                    <div class="cell" data-index="6" tabindex="0" role="button" aria-label="Cell 7, empty"></div>
+                    <div class="cell" data-index="7" tabindex="0" role="button" aria-label="Cell 8, empty"></div>
+                    <div class="cell" data-index="8" tabindex="0" role="button" aria-label="Cell 9, empty"></div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="action-btn secondary" id="resetBtn" aria-label="Reset Game">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
+                <button class="action-btn" id="shareBtn" aria-label="Share Game">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+            </div>
+        </div>
+
+        <!-- Rock Paper Scissors Game Section -->
+        <div id="rpsGameSection" class="section-container rps-container">
+            <div class="header">
+                <h1>Rock Paper Scissors</h1>
+                <div class="badge">GAME</div>
+                <div class="version">v2.0.0</div>
+            </div>
+
+            <div class="game-modes">
+                <button class="mode-btn active" id="rpsAiMode" aria-label="Play with AI">
+                    <i class="fas fa-robot"></i> Play with AI
+                </button>
+                <button class="mode-btn" id="rpsFriendMode" aria-label="Play with Friend">
+                    <i class="fas fa-user-friends"></i> Play with Friend
+                </button>
+            </div>
+
+            <div class="difficulty-selector" id="rpsDifficultySelector">
+                <h3>Select Difficulty</h3>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-btn" data-difficulty="easy" aria-label="Easy difficulty">Easy</button>
+                    <button class="difficulty-btn active" data-difficulty="medium" aria-label="Medium difficulty">Medium</button>
+                    <button class="difficulty-btn" data-difficulty="hard" aria-label="Hard difficulty">Hard</button>
+                </div>
+            </div>
+
+            <div class="game-id-container" id="rpsGameIdContainer">
+                <h3>Multiplayer Game</h3>
+                <input type="text" class="game-id-input" id="rpsGameIdInput" placeholder="Enter Game ID" maxlength="6" aria-label="Game ID input">
+                <button class="game-id-btn" id="rpsJoinGameBtn" aria-label="Join Game">
+                    <i class="fas fa-sign-in-alt"></i> Join Game
+                </button>
+                <button class="game-id-btn" id="rpsCreateGameBtn" aria-label="Create New Game">
+                    <i class="fas fa-plus-circle"></i> Create New Game
+                </button>
+                <div class="game-id-display" id="rpsGameIdDisplay"></div>
+            </div>
+
+            <div class="status" id="rpsStatus">Choose your move</div>
+
+            <div class="rps-choices" id="rpsChoices">
+                <div class="rps-choice" data-choice="rock" tabindex="0" role="button" aria-label="Choose Rock">
+                    <i class="fas fa-hand-rock"></i>
+                </div>
+                <div class="rps-choice" data-choice="paper" tabindex="0" role="button" aria-label="Choose Paper">
+                    <i class="fas fa-hand-paper"></i>
+                </div>
+                <div class="rps-choice" data-choice="scissors" tabindex="0" role="button" aria-label="Choose Scissors">
+                    <i class="fas fa-hand-scissors"></i>
+                </div>
+            </div>
+
+            <div class="rps-result" id="rpsResult">
+                <div class="rps-player">
+                    <div class="rps-choice-display" id="playerChoiceDisplay">
+                        <i class="fas fa-question"></i>
+                    </div>
+                    <div class="rps-choice-label">You</div>
+                </div>
+                <div class="rps-vs">VS</div>
+                <div class="rps-computer">
+                    <div class="rps-choice-display" id="computerChoiceDisplay">
+                        <i class="fas fa-question"></i>
+                    </div>
+                    <div class="rps-choice-label">Opponent</div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="action-btn secondary" id="rpsResetBtn" aria-label="Play Again">
+                    <i class="fas fa-redo"></i> Play Again
+                </button>
+                <button class="action-btn" id="rpsShareBtn" aria-label="Share Game">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+            </div>
+        </div>
+
+        <!-- Leaderboard Section -->
+        <div id="leaderboardSection" class="section-container">
+            <div class="header">
+                <h1>Leaderboard</h1>
+                <div class="badge">TOP</div>
+                <div class="version">v2.0.0</div>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" id="allLeaderboardTab" role="tab" aria-selected="true" tabindex="0">
+                    <i class="fas fa-trophy"></i> All
+                </div>
+                <div class="tab" id="tttLeaderboardTab" role="tab" aria-selected="false" tabindex="0">
+                    <i class="fas fa-th"></i> TTT
+                </div>
+                <div class="tab" id="rpsLeaderboardTab" role="tab" aria-selected="false" tabindex="0">
+                    <i class="fas fa-hand-rock"></i> RPS
+                </div>
+            </div>
+
+            <div class="tab-content active" id="allLeaderboardContent" role="tabpanel" aria-labelledby="allLeaderboardTab">
+                <div class="leaderboard">
+                    <h2><i class="fas fa-trophy"></i> Top Players</h2>
+                    <div id="allLeaderboardLoading" class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading leaderboard...</p>
+                    </div>
+                    <ul class="leaderboard-list" id="allLeaderboardList"></ul>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tttLeaderboardContent" role="tabpanel" aria-labelledby="tttLeaderboardTab">
+                <div class="leaderboard">
+                    <h2><i class="fas fa-th"></i> TicTacToe Leaderboard</h2>
+                    <div id="tttLeaderboardLoading" class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading leaderboard...</p>
+                    </div>
+                    <ul class="leaderboard-list" id="tttLeaderboardList"></ul>
+                </div>
+            </div>
+
+            <div class="tab-content" id="rpsLeaderboardContent" role="tabpanel" aria-labelledby="rpsLeaderboardTab">
+                <div class="leaderboard">
+                    <h2><i class="fas fa-hand-rock"></i> RPS Leaderboard</h2>
+                    <div id="rpsLeaderboardLoading" class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading leaderboard...</p>
+                    </div>
+                    <ul class="leaderboard-list" id="rpsLeaderboardList"></ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Section -->
+        <div id="notificationsSection" class="section-container notifications-container">
+            <div class="header">
+                <h1>Notifications</h1>
+                <div class="badge">NEW</div>
+                <div class="version">v2.0.0</div>
+            </div>
+
+            <div id="notificationsLoading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading notifications...</p>
+            </div>
+
+            <div id="notificationsList">
+                <!-- Notifications will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="profileSection" class="section-container profile-container">
+            <div class="header">
+                <h1>Profile</h1>
+                <div class="badge">YOU</div>
+                <div class="version">v2.0.0</div>
+            </div>
+
+            <div class="profile-header">
+                <div class="profile-avatar-large" id="profileAvatarLarge">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-username" id="profileUsername">@username</div>
+                <div class="profile-fullname" id="profileFullname">Player Name</div>
+            </div>
+
+            <div class="profile-stats-row">
+                <div class="profile-stat-item">
+                    <div class="profile-stat-value" id="profileTotalWins">0</div>
+                    <div class="profile-stat-label">Wins</div>
+                </div>
+                <div class="profile-stat-item">
+                    <div class="profile-stat-value" id="profileTotalGames">0</div>
+                    <div class="profile-stat-label">Games</div>
+                </div>
+                <div class="profile-stat-item">
+                    <div class="profile-stat-value" id="profileWinRate">0%</div>
+                    <div class="profile-stat-label">Win Rate</div>
+                </div>
+            </div>
+
+            <div class="profile-section-title">
+                <i class="fas fa-history"></i> Recent Games
+            </div>
+
+            <div id="profileHistoryLoading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading game history...</p>
+            </div>
+            <ul class="history-list" id="profileHistoryList"></ul>
         </div>
     </div>
 
@@ -1056,6 +1683,30 @@
 
     <div class="confetti-container" id="confettiContainer"></div>
     <div class="debug-panel" id="debugPanel"></div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" id="dashboardNav" data-section="dashboardSection">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+        </div>
+        <div class="nav-item" id="gamesNav" data-section="gamesSection">
+            <i class="fas fa-gamepad"></i>
+            <span>Games</span>
+        </div>
+        <div class="nav-item" id="leaderboardNav" data-section="leaderboardSection">
+            <i class="fas fa-trophy"></i>
+            <span>Leaderboard</span>
+        </div>
+        <div class="nav-item" id="notificationsNav" data-section="notificationsSection">
+            <i class="fas fa-bell"></i>
+            <span>Notifications</span>
+        </div>
+        <div class="nav-item" id="profileNav" data-section="profileSection">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </div>
+    </div>
 
     <script>
         // Initialize Telegram WebApp
@@ -1146,9 +1797,27 @@
             playerStats: {
                 wins: 0,
                 games: 0,
-                winRate: 0
+                winRate: 0,
+                tttWins: 0,
+                tttGames: 0,
+                rpsWins: 0,
+                rpsGames: 0
             }
         };
+
+        // RPS Game state
+        let rpsGameState = {
+            gameMode: "ai",
+            difficulty: "medium",
+            gameId: null,
+            status: "playing",
+            playerChoice: null,
+            opponentChoice: null,
+            result: null
+        };
+
+        // Navigation state
+        let currentSection = "dashboardSection";
 
         // DOM elements
         const boardElement = document.getElementById("board");
@@ -1164,22 +1833,88 @@
         const joinGameButton = document.getElementById("joinGameBtn");
         const createGameButton = document.getElementById("createGameBtn");
         const difficultyButtons = document.querySelectorAll(".difficulty-btn");
-        const leaderboardListElement = document.getElementById("leaderboardList");
-        const leaderboardLoadingElement = document.getElementById("leaderboardLoading");
-        const historyListElement = document.getElementById("historyList");
-        const historyLoadingElement = document.getElementById("historyLoading");
-        const leaderboardTab = document.getElementById("leaderboardTab");
-        const historyTab = document.getElementById("historyTab");
-        const leaderboardContent = document.getElementById("leaderboardContent");
-        const historyContent = document.getElementById("historyContent");
-        const confettiContainer = document.getElementById("confettiContainer");
+        
+        // RPS DOM elements
+        const rpsStatusElement = document.getElementById("rpsStatus");
+        const rpsChoicesElement = document.getElementById("rpsChoices");
+        const playerChoiceDisplayElement = document.getElementById("playerChoiceDisplay");
+        const computerChoiceDisplayElement = document.getElementById("computerChoiceDisplay");
+        const rpsResetButton = document.getElementById("rpsResetBtn");
+        const rpsShareButton = document.getElementById("rpsShareBtn");
+        const rpsAiModeButton = document.getElementById("rpsAiMode");
+        const rpsFriendModeButton = document.getElementById("rpsFriendMode");
+        const rpsDifficultySelectorElement = document.getElementById("rpsDifficultySelector");
+        const rpsGameIdContainerElement = document.getElementById("rpsGameIdContainer");
+        const rpsGameIdInputElement = document.getElementById("rpsGameIdInput");
+        const rpsGameIdDisplayElement = document.getElementById("rpsGameIdDisplay");
+        const rpsJoinGameButton = document.getElementById("rpsJoinGameBtn");
+        const rpsCreateGameButton = document.getElementById("rpsCreateGameBtn");
+        const rpsDifficultyButtons = document.querySelectorAll("#rpsDifficultySelector .difficulty-btn");
+        
+        // Leaderboard DOM elements
+        const allLeaderboardListElement = document.getElementById("allLeaderboardList");
+        const tttLeaderboardListElement = document.getElementById("tttLeaderboardList");
+        const rpsLeaderboardListElement = document.getElementById("rpsLeaderboardList");
+        const allLeaderboardLoadingElement = document.getElementById("allLeaderboardLoading");
+        const tttLeaderboardLoadingElement = document.getElementById("tttLeaderboardLoading");
+        const rpsLeaderboardLoadingElement = document.getElementById("rpsLeaderboardLoading");
+        
+        // Navigation DOM elements
+        const navItems = document.querySelectorAll(".nav-item");
+        const sectionContainers = document.querySelectorAll(".section-container");
+        
+        // Game cards
+        const tttGameCard = document.getElementById("tttGameCard");
+        const rpsGameCard = document.getElementById("rpsGameCard");
+        
+        // Leaderboard tabs
+        const allLeaderboardTab = document.getElementById("allLeaderboardTab");
+        const tttLeaderboardTab = document.getElementById("tttLeaderboardTab");
+        const rpsLeaderboardTab = document.getElementById("rpsLeaderboardTab");
+        const allLeaderboardContent = document.getElementById("allLeaderboardContent");
+        const tttLeaderboardContent = document.getElementById("tttLeaderboardContent");
+        const rpsLeaderboardContent = document.getElementById("rpsLeaderboardContent");
+        
+        // Dashboard tabs
+        const recentGamesTab = document.getElementById("recentGamesTab");
+        const statsTab = document.getElementById("statsTab");
+        const recentGamesContent = document.getElementById("recentGamesContent");
+        const statsContent = document.getElementById("statsContent");
+        
+        // Profile elements
         const profileNameElement = document.getElementById("profileName");
         const profileAvatarElement = document.getElementById("profileAvatar");
+        const profileAvatarLargeElement = document.getElementById("profileAvatarLarge");
+        const profileUsernameElement = document.getElementById("profileUsername");
+        const profileFullnameElement = document.getElementById("profileFullname");
+        const profileTotalWinsElement = document.getElementById("profileTotalWins");
+        const profileTotalGamesElement = document.getElementById("profileTotalGames");
+        const profileWinRateElement = document.getElementById("profileWinRate");
+        const profileHistoryListElement = document.getElementById("profileHistoryList");
+        const profileHistoryLoadingElement = document.getElementById("profileHistoryLoading");
+        
+        // Stats elements
         const statWinsElement = document.getElementById("statWins");
         const statGamesElement = document.getElementById("statGames");
         const statWinRateElement = document.getElementById("statWinRate");
-
-        // Initialize player profile
+        const tttWinsElement = document.getElementById("tttWins");
+        const rpsWinsElement = document.getElementById("rpsWins");
+        const totalGamesElement = document.getElementById("totalGames");
+        const overallWinRateElement = document.getElementById("overallWinRate");
+        const tttCardWinsElement = document.getElementById("tttCardWins");
+        const tttCardGamesElement = document.getElementById("tttCardGames");
+        const rpsCardWinsElement = document.getElementById("rpsCardWins");
+        const rpsCardGamesElement = document.getElementById("rpsCardGames");
+        
+        // Notifications elements
+        const notificationsListElement = document.getElementById("notificationsList");
+        const notificationsLoadingElement = document.getElementById("notificationsLoading");
+        
+        // Dashboard history elements
+        const dashboardHistoryListElement = document.getElementById("dashboardHistoryList");
+        const dashboardHistoryLoadingElement = document.getElementById("dashboardHistoryLoading");
+        
+        // Initialize profile
         function initializeProfile() {
             // Try to get user data from Telegram
             if (tgApp.initDataUnsafe && tgApp.initDataUnsafe.user) {
@@ -1188,11 +1923,14 @@
                 
                 // Update profile UI
                 profileNameElement.textContent = gameState.playerName;
+                profileFullnameElement.textContent = gameState.playerName;
+                profileUsernameElement.textContent = user.username ? `@${user.username}` : "";
                 
                 // If user has initials, show them in avatar
                 if (gameState.playerName) {
                     const initials = gameState.playerName.charAt(0).toUpperCase();
                     profileAvatarElement.innerHTML = initials;
+                    profileAvatarLargeElement.innerHTML = initials;
                 }
                 
                 // Load player stats from Firebase
@@ -1214,6 +1952,10 @@
                 if (userData) {
                     gameState.playerStats.wins = userData.wins || 0;
                     gameState.playerStats.games = userData.games || 0;
+                    gameState.playerStats.tttWins = userData.tttWins || 0;
+                    gameState.playerStats.tttGames = userData.tttGames || 0;
+                    gameState.playerStats.rpsWins = userData.rpsWins || 0;
+                    gameState.playerStats.rpsGames = userData.rpsGames || 0;
                     gameState.playerStats.winRate = userData.games > 0 
                         ? Math.round((userData.wins / userData.games) * 100) 
                         : 0;
@@ -1231,27 +1973,84 @@
             statWinsElement.textContent = gameState.playerStats.wins;
             statGamesElement.textContent = gameState.playerStats.games;
             statWinRateElement.textContent = `${gameState.playerStats.winRate}%`;
+            
+            // Update detailed stats
+            tttWinsElement.textContent = gameState.playerStats.tttWins;
+            rpsWinsElement.textContent = gameState.playerStats.rpsWins;
+            totalGamesElement.textContent = gameState.playerStats.games;
+            overallWinRateElement.textContent = `${gameState.playerStats.winRate}%`;
+            
+            // Update game cards
+            tttCardWinsElement.textContent = gameState.playerStats.tttWins;
+            tttCardGamesElement.textContent = gameState.playerStats.tttGames;
+            rpsCardWinsElement.textContent = gameState.playerStats.rpsWins;
+            rpsCardGamesElement.textContent = gameState.playerStats.rpsGames;
+            
+            // Update profile stats
+            profileTotalWinsElement.textContent = gameState.playerStats.wins;
+            profileTotalGamesElement.textContent = gameState.playerStats.games;
+            profileWinRateElement.textContent = `${gameState.playerStats.winRate}%`;
         }
 
         // Check for game ID in URL
         const urlParams = new URLSearchParams(window.location.search);
         const gameIdFromUrl = urlParams.get("gameId");
+        const gameTypeFromUrl = urlParams.get("gameType");
 
         if (gameIdFromUrl) {
-            debug(`Game ID found in URL: ${gameIdFromUrl}`);
-            gameState.gameMode = "friend";
-            gameState.gameId = gameIdFromUrl;
-            updateGameModeUI();
-            joinGame(gameIdFromUrl);
+            debug(`Game ID found in URL: ${gameIdFromUrl}, type: ${gameTypeFromUrl || 'ttt'}`);
+            
+            if (gameTypeFromUrl === 'rps') {
+                // Switch to RPS game
+                switchSection('rpsGameSection');
+                rpsGameState.gameMode = "friend";
+                rpsGameState.gameId = gameIdFromUrl;
+                updateRpsGameModeUI();
+                joinRpsGame(gameIdFromUrl);
+            } else {
+                // Default to TicTacToe
+                switchSection('tttGameSection');
+                gameState.gameMode = "friend";
+                gameState.gameId = gameIdFromUrl;
+                updateGameModeUI();
+                joinGame(gameIdFromUrl);
+            }
         } else {
-            debug("No game ID found in URL, starting in AI mode");
-            updateGameModeUI();
+            debug("No game ID found in URL, starting in dashboard mode");
+            switchSection('dashboardSection');
         }
 
         // Initialize profile
         initializeProfile();
 
-        // Event listeners
+        // Load initial data
+        loadLeaderboard();
+        loadGameHistory();
+        loadNotifications();
+
+        // Event listeners for navigation
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const sectionId = item.dataset.section;
+                switchSection(sectionId);
+                
+                // If switching to games section, show game selection
+                if (sectionId === 'gamesSection') {
+                    document.getElementById('gamesSection').classList.add('visible');
+                }
+            });
+        });
+
+        // Event listeners for game cards
+        tttGameCard.addEventListener('click', () => {
+            switchSection('tttGameSection');
+        });
+
+        rpsGameCard.addEventListener('click', () => {
+            switchSection('rpsGameSection');
+        });
+
+        // Event listeners for TicTacToe
         boardElement.addEventListener("click", handleCellClick);
         boardElement.addEventListener("keydown", handleCellKeydown);
         resetButton.addEventListener("click", resetGame);
@@ -1260,21 +2059,44 @@
         friendModeButton.addEventListener("click", () => setGameMode("friend"));
         joinGameButton.addEventListener("click", () => joinGame(gameIdInputElement.value));
         createGameButton.addEventListener("click", createNewGame);
-        leaderboardTab.addEventListener("click", () => switchTab("leaderboard"));
-        historyTab.addEventListener("click", () => switchTab("history"));
+
+        // Event listeners for RPS
+        rpsChoicesElement.addEventListener("click", handleRpsChoice);
+        rpsResetButton.addEventListener("click", resetRpsGame);
+        rpsShareButton.addEventListener("click", shareRpsGame);
+        rpsAiModeButton.addEventListener("click", () => setRpsGameMode("ai"));
+        rpsFriendModeButton.addEventListener("click", () => setRpsGameMode("friend"));
+        rpsJoinGameButton.addEventListener("click", () => joinRpsGame(rpsGameIdInputElement.value));
+        rpsCreateGameButton.addEventListener("click", createNewRpsGame);
+
+        // Event listeners for leaderboard tabs
+        allLeaderboardTab.addEventListener("click", () => switchLeaderboardTab("all"));
+        tttLeaderboardTab.addEventListener("click", () => switchLeaderboardTab("ttt"));
+        rpsLeaderboardTab.addEventListener("click", () => switchLeaderboardTab("rps"));
+
+        // Event listeners for dashboard tabs
+        recentGamesTab.addEventListener("click", () => switchDashboardTab("recentGames"));
+        statsTab.addEventListener("click", () => switchDashboardTab("stats"));
 
         // Keyboard navigation for tabs
-        leaderboardTab.addEventListener("keydown", (e) => {
+        allLeaderboardTab.addEventListener("keydown", (e) => {
             if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
-                switchTab("leaderboard");
+                switchLeaderboardTab("all");
             }
         });
         
-        historyTab.addEventListener("keydown", (e) => {
+        tttLeaderboardTab.addEventListener("keydown", (e) => {
             if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
-                switchTab("history");
+                switchLeaderboardTab("ttt");
+            }
+        });
+        
+        rpsLeaderboardTab.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                switchLeaderboardTab("rps");
             }
         });
 
@@ -1287,28 +2109,92 @@
             });
         });
 
-        // Load leaderboard
-        loadLeaderboard();
-        
-        // Load game history
-        loadGameHistory();
+        rpsDifficultyButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                rpsDifficultyButtons.forEach(btn => btn.classList.remove("active"));
+                button.classList.add("active");
+                rpsGameState.difficulty = button.dataset.difficulty;
+                resetRpsGame();
+            });
+        });
 
         // Functions
-        function switchTab(tabName) {
-            if (tabName === "leaderboard") {
-                leaderboardTab.classList.add("active");
-                historyTab.classList.remove("active");
-                leaderboardContent.classList.add("active");
-                historyContent.classList.remove("active");
-                leaderboardTab.setAttribute("aria-selected", "true");
-                historyTab.setAttribute("aria-selected", "false");
+        function switchSection(sectionId) {
+            // Hide all sections
+            sectionContainers.forEach(section => {
+                section.style.display = 'none';
+                section.classList.remove('visible');
+            });
+            
+            // Show selected section
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.style.display = 'block';
+                setTimeout(() => {
+                    selectedSection.classList.add('visible');
+                }, 10);
+            }
+            
+            // Update navigation
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.section === sectionId) {
+                    item.classList.add('active');
+                }
+            });
+            
+            currentSection = sectionId;
+        }
+
+        function switchLeaderboardTab(tabName) {
+            if (tabName === "all") {
+                allLeaderboardTab.classList.add("active");
+                tttLeaderboardTab.classList.remove("active");
+                rpsLeaderboardTab.classList.remove("active");
+                allLeaderboardContent.classList.add("active");
+                tttLeaderboardContent.classList.remove("active");
+                rpsLeaderboardContent.classList.remove("active");
+                allLeaderboardTab.setAttribute("aria-selected", "true");
+                tttLeaderboardTab.setAttribute("aria-selected", "false");
+                rpsLeaderboardTab.setAttribute("aria-selected", "false");
+            } else if (tabName === "ttt") {
+                allLeaderboardTab.classList.remove("active");
+                tttLeaderboardTab.classList.add("active");
+                rpsLeaderboardTab.classList.remove("active");
+                allLeaderboardContent.classList.remove("active");
+                tttLeaderboardContent.classList.add("active");
+                rpsLeaderboardContent.classList.remove("active");
+                allLeaderboardTab.setAttribute("aria-selected", "false");
+                tttLeaderboardTab.setAttribute("aria-selected", "true");
+                rpsLeaderboardTab.setAttribute("aria-selected", "false");
             } else {
-                leaderboardTab.classList.remove("active");
-                historyTab.classList.add("active");
-                leaderboardContent.classList.remove("active");
-                historyContent.classList.add("active");
-                leaderboardTab.setAttribute("aria-selected", "false");
-                historyTab.setAttribute("aria-selected", "true");
+                allLeaderboardTab.classList.remove("active");
+                tttLeaderboardTab.classList.remove("active");
+                rpsLeaderboardTab.classList.add("active");
+                allLeaderboardContent.classList.remove("active");
+                tttLeaderboardContent.classList.remove("active");
+                rpsLeaderboardContent.classList.add("active");
+                allLeaderboardTab.setAttribute("aria-selected", "false");
+                tttLeaderboardTab.setAttribute("aria-selected", "false");
+                rpsLeaderboardTab.setAttribute("aria-selected", "true");
+            }
+        }
+
+        function switchDashboardTab(tabName) {
+            if (tabName === "recentGames") {
+                recentGamesTab.classList.add("active");
+                statsTab.classList.remove("active");
+                recentGamesContent.classList.add("active");
+                statsContent.classList.remove("active");
+                recentGamesTab.setAttribute("aria-selected", "true");
+                statsTab.setAttribute("aria-selected", "false");
+            } else {
+                recentGamesTab.classList.remove("active");
+                statsTab.classList.add("active");
+                recentGamesContent.classList.remove("active");
+                statsContent.classList.add("active");
+                recentGamesTab.setAttribute("aria-selected", "false");
+                statsTab.setAttribute("aria-selected", "true");
             }
         }
 
@@ -1326,12 +2212,33 @@
             }
         }
 
+        function updateRpsGameModeUI() {
+            if (rpsGameState.gameMode === "ai") {
+                rpsAiModeButton.classList.add("active");
+                rpsFriendModeButton.classList.remove("active");
+                rpsDifficultySelectorElement.classList.add("visible");
+                rpsGameIdContainerElement.classList.remove("visible");
+            } else {
+                rpsAiModeButton.classList.remove("active");
+                rpsFriendModeButton.classList.add("active");
+                rpsDifficultySelectorElement.classList.remove("visible");
+                rpsGameIdContainerElement.classList.add("visible");
+            }
+        }
+
         function setGameMode(mode) {
             gameState.gameMode = mode;
             updateGameModeUI();
             resetGame();
         }
 
+        function setRpsGameMode(mode) {
+            rpsGameState.gameMode = mode;
+            updateRpsGameModeUI();
+            resetRpsGame();
+        }
+
+        // TicTacToe Game Functions
         function handleCellClick(event) {
             if (!event.target.classList.contains("cell")) return;
             
@@ -1400,7 +2307,7 @@
                 updateStatus();
                 
                 if (result.status === "win" && gameState.currentPlayer === gameState.playerSymbol) {
-                    updateLeaderboard();
+                    updateLeaderboard("ttt");
                     showConfetti();
                 }
                 
@@ -1537,19 +2444,22 @@
                 if (gameState.currentPlayer === gameState.playerSymbol) {
                     gameState.playerStats.wins++;
                     gameState.playerStats.games++;
+                    gameState.playerStats.tttWins++;
+                    gameState.playerStats.tttGames++;
                     gameState.playerStats.winRate = Math.round((gameState.playerStats.wins / gameState.playerStats.games) * 100);
                     updateStatsUI();
                     updatePlayerStatsInFirebase();
                 } else if (gameState.gameMode === "ai") {
                     // Only count as a game if playing against AI
                     gameState.playerStats.games++;
+                    gameState.playerStats.tttGames++;
                     gameState.playerStats.winRate = Math.round((gameState.playerStats.wins / gameState.playerStats.games) * 100);
                     updateStatsUI();
                     updatePlayerStatsInFirebase();
                 }
                 
                 // Add to game history
-                addGameToHistory(gameState.currentPlayer === gameState.playerSymbol ? "win" : "loss");
+                addGameToHistory(gameState.currentPlayer === gameState.playerSymbol ? "win" : "loss", "ttt");
             } else if (gameState.status === "draw") {
                 statusElement.textContent = "It's a draw!";
                 statusElement.classList.add("draw");
@@ -1558,12 +2468,13 @@
                 if (gameState.gameMode === "ai" || 
                     (gameState.gameMode === "friend" && gameState.gameId)) {
                     gameState.playerStats.games++;
+                    gameState.playerStats.tttGames++;
                     gameState.playerStats.winRate = Math.round((gameState.playerStats.wins / gameState.playerStats.games) * 100);
                     updateStatsUI();
                     updatePlayerStatsInFirebase();
                     
                     // Add to game history
-                    addGameToHistory("draw");
+                    addGameToHistory("draw", "ttt");
                 }
             } else {
                 statusElement.textContent = `${gameState.currentPlayer}'s turn`;
@@ -1673,6 +2584,7 @@
                 board: ["", "", "", "", "", "", "", "", ""],
                 currentTurn: "X",
                 status: "waiting",
+                gameType: "ttt",
                 createdAt: firebase.database.ServerValue.TIMESTAMP,
                 expiryTime: Date.now() + (30 * 60 * 1000), // 30 minutes expiry
                 createdBy: tgApp.initDataUnsafe && tgApp.initDataUnsafe.user ? tgApp.initDataUnsafe.user.id : null,
@@ -1690,7 +2602,8 @@
                 if (tgApp.initDataUnsafe && tgApp.initDataUnsafe.user) {
                     tgApp.sendData(JSON.stringify({
                         type: "share_game",
-                        game_id: gameId
+                        game_id: gameId,
+                        game_type: "ttt"
                     }));
                 }
                 
@@ -1803,11 +2716,12 @@
                 if (tgApp.initDataUnsafe && tgApp.initDataUnsafe.user) {
                     tgApp.sendData(JSON.stringify({
                         type: "share_game",
-                        game_id: gameState.gameId
+                        game_id: gameState.gameId,
+                        game_type: "ttt"
                     }));
                 } else {
                     // Fallback for testing in browser
-                    const shareUrl = `${window.location.origin}${window.location.pathname}?gameId=${gameState.gameId}`;
+                    const shareUrl = `${window.location.origin}${window.location.pathname}?gameId=${gameState.gameId}&gameType=ttt`;
                     navigator.clipboard.writeText(shareUrl)
                         .then(() => showSuccess("Game link copied to clipboard!"))
                         .catch(() => showError("Failed to copy game link."));
@@ -1817,13 +2731,452 @@
             }
         }
 
-        function updateLeaderboard() {
+        // RPS Game Functions
+        function handleRpsChoice(event) {
+            const choiceElement = event.target.closest('.rps-choice');
+            if (!choiceElement) return;
+            
+            if (rpsGameState.status !== "playing") {
+                return;
+            }
+            
+            const choice = choiceElement.dataset.choice;
+            
+            if (rpsGameState.gameMode === "ai") {
+                // Handle AI mode
+                makeRpsMove(choice);
+                
+                setTimeout(() => {
+                    makeRpsAIMove();
+                }, 1000);
+            } else if (rpsGameState.gameMode === "friend" && rpsGameState.gameId) {
+                // Handle friend mode with Firebase
+                const gameRef = db.ref(`rps_games/${rpsGameState.gameId}`);
+                
+                gameRef.once("value").then(snapshot => {
+                    const gameData = snapshot.val();
+                    
+                    if (!gameData) {
+                        showError("Game not found.");
+                        return;
+                    }
+                    
+                    // Check if player has already made a choice
+                    const isCreator = tgApp.initDataUnsafe && tgApp.initDataUnsafe.user && 
+                                     gameData.createdBy === tgApp.initDataUnsafe.user.id;
+                    
+                    if (isCreator) {
+                        if (gameData.creatorChoice) {
+                            showError("You've already made your choice!");
+                            return;
+                        }
+                        
+                        // Update creator's choice
+                        gameRef.update({
+                            creatorChoice: choice
+                        }).then(() => {
+                            debug(`Creator choice updated: ${choice}`);
+                            showSuccess("Your choice has been recorded!");
+                            
+                            // Update UI
+                            updateRpsPlayerChoice(choice);
+                            
+                            // Check if both players have made choices
+                            if (gameData.joinerChoice) {
+                                determineRpsWinner(choice, gameData.joinerChoice);
+                            } else {
+                                rpsStatusElement.textContent = "Waiting for opponent...";
+                            }
+                        }).catch(error => {
+                            debug(`Error updating choice: ${error.message}`);
+                            showError("Failed to update choice. Please try again.");
+                        });
+                    } else {
+                        if (gameData.joinerChoice) {
+                            showError("You've already made your choice!");
+                            return;
+                        }
+                        
+                        // Update joiner's choice
+                        gameRef.update({
+                            joinerChoice: choice
+                        }).then(() => {
+                            debug(`Joiner choice updated: ${choice}`);
+                            showSuccess("Your choice has been recorded!");
+                            
+                            // Update UI
+                            updateRpsPlayerChoice(choice);
+                            
+                            // Check if both players have made choices
+                            if (gameData.creatorChoice) {
+                                determineRpsWinner(choice, gameData.creatorChoice);
+                            } else {
+                                rpsStatusElement.textContent = "Waiting for opponent...";
+                            }
+                        }).catch(error => {
+                            debug(`Error updating choice: ${error.message}`);
+                            showError("Failed to update choice. Please try again.");
+                        });
+                    }
+                }).catch(error => {
+                    debug(`Error getting game data: ${error.message}`);
+                    showError("Failed to get game data. Please try again.");
+                });
+            } else {
+                showError("Create or join a game first!");
+            }
+        }
+
+        function makeRpsMove(choice) {
+            rpsGameState.playerChoice = choice;
+            updateRpsPlayerChoice(choice);
+        }
+
+        function makeRpsAIMove() {
+            if (rpsGameState.status !== "playing") {
+                return;
+            }
+            
+            let aiChoice;
+            
+            switch (rpsGameState.difficulty) {
+                case "easy":
+                    // Random choice
+                    aiChoice = getRandomRpsChoice();
+                    break;
+                case "medium":
+                    // 50% random, 50% counter player's choice
+                    if (Math.random() < 0.5) {
+                        aiChoice = getRandomRpsChoice();
+                    } else {
+                        aiChoice = getCounterRpsChoice(rpsGameState.playerChoice);
+                    }
+                    break;
+                case "hard":
+                    // 80% counter player's choice, 20% random
+                    if (Math.random() < 0.8) {
+                        aiChoice = getCounterRpsChoice(rpsGameState.playerChoice);
+                    } else {
+                        aiChoice = getRandomRpsChoice();
+                    }
+                    break;
+                default:
+                    aiChoice = getRandomRpsChoice();
+            }
+            
+            rpsGameState.opponentChoice = aiChoice;
+            updateRpsOpponentChoice(aiChoice);
+            
+            // Determine winner
+            determineRpsWinner(rpsGameState.playerChoice, aiChoice);
+        }
+
+        function getRandomRpsChoice() {
+            const choices = ["rock", "paper", "scissors"];
+            return choices[Math.floor(Math.random() * choices.length)];
+        }
+
+        function getCounterRpsChoice(playerChoice) {
+            switch (playerChoice) {
+                case "rock": return "paper";
+                case "paper": return "scissors";
+                case "scissors": return "rock";
+                default: return getRandomRpsChoice();
+            }
+        }
+
+        function updateRpsPlayerChoice(choice) {
+            // Clear all selections
+            document.querySelectorAll('.rps-choice').forEach(el => {
+                el.classList.remove('selected', 'win', 'lose');
+            });
+            
+            // Highlight selected choice
+            const selectedElement = document.querySelector(`.rps-choice[data-choice="${choice}"]`);
+            if (selectedElement) {
+                selectedElement.classList.add('selected');
+            }
+            
+            // Update player choice display
+            const iconClass = getChoiceIconClass(choice);
+            playerChoiceDisplayElement.innerHTML = `<i class="${iconClass}"></i>`;
+        }
+
+        function updateRpsOpponentChoice(choice) {
+            // Update opponent choice display
+            const iconClass = getChoiceIconClass(choice);
+            computerChoiceDisplayElement.innerHTML = `<i class="${iconClass}"></i>`;
+        }
+
+        function getChoiceIconClass(choice) {
+            switch (choice) {
+                case "rock": return "fas fa-hand-rock";
+                case "paper": return "fas fa-hand-paper";
+                case "scissors": return "fas fa-hand-scissors";
+                default: return "fas fa-question";
+            }
+        }
+
+        function determineRpsWinner(playerChoice, opponentChoice) {
+            let result;
+            
+            if (playerChoice === opponentChoice) {
+                result = "draw";
+                rpsStatusElement.textContent = "It's a draw!";
+                rpsStatusElement.classList.add("draw");
+            } else if (
+                (playerChoice === "rock" && opponentChoice === "scissors") ||
+                (playerChoice === "paper" && opponentChoice === "rock") ||
+                (playerChoice === "scissors" && opponentChoice === "paper")
+            ) {
+                result = "win";
+                rpsStatusElement.textContent = "You win!";
+                rpsStatusElement.classList.add("win");
+                document.querySelector(`.rps-choice[data-choice="${playerChoice}"]`).classList.add('win');
+                
+                // Update player stats
+                gameState.playerStats.wins++;
+                gameState.playerStats.games++;
+                gameState.playerStats.rpsWins++;
+                gameState.playerStats.rpsGames++;
+                gameState.playerStats.winRate = Math.round((gameState.playerStats.wins / gameState.playerStats.games) * 100);
+                updateStatsUI();
+                updatePlayerStatsInFirebase();
+                updateLeaderboard("rps");
+                showConfetti();
+            } else {
+                result = "loss";
+                rpsStatusElement.textContent = "You lose!";
+                rpsStatusElement.classList.add("draw");
+                document.querySelector(`.rps-choice[data-choice="${playerChoice}"]`).classList.add('lose');
+                
+                // Update player stats
+                gameState.playerStats.games++;
+                gameState.playerStats.rpsGames++;
+                gameState.playerStats.winRate = Math.round((gameState.playerStats.wins / gameState.playerStats.games) * 100);
+                updateStatsUI();
+                updatePlayerStatsInFirebase();
+            }
+            
+            rpsGameState.result = result;
+            rpsGameState.status = "finished";
+            
+            // Add to game history
+            addGameToHistory(result, "rps");
+        }
+
+        function resetRpsGame() {
+            rpsGameState.playerChoice = null;
+            rpsGameState.opponentChoice = null;
+            rpsGameState.result = null;
+            rpsGameState.status = "playing";
+            
+            // Reset UI
+            document.querySelectorAll('.rps-choice').forEach(el => {
+                el.classList.remove('selected', 'win', 'lose');
+            });
+            
+            playerChoiceDisplayElement.innerHTML = `<i class="fas fa-question"></i>`;
+            computerChoiceDisplayElement.innerHTML = `<i class="fas fa-question"></i>`;
+            
+            rpsStatusElement.textContent = "Choose your move";
+            rpsStatusElement.classList.remove("win", "draw");
+            
+            if (rpsGameState.gameMode === "friend" && rpsGameState.gameId) {
+                // Reset game in Firebase
+                const gameRef = db.ref(`rps_games/${rpsGameState.gameId}`);
+                gameRef.update({
+                    creatorChoice: null,
+                    joinerChoice: null,
+                    status: "playing",
+                    result: null
+                }).then(() => {
+                    showSuccess("Game reset successfully!");
+                }).catch(error => {
+                    debug(`Error resetting game: ${error.message}`);
+                    showError("Failed to reset game. Please try again.");
+                });
+            }
+        }
+
+        function createNewRpsGame() {
+            debug("Creating new RPS game...");
+            
+            // Generate a random game ID (6 characters)
+            const gameId = Math.random().toString(36).substring(2, 8).toUpperCase();
+            rpsGameState.gameId = gameId;
+            
+            // Create game in Firebase
+            const gameRef = db.ref(`rps_games/${gameId}`);
+            gameRef.set({
+                id: gameId,
+                creatorChoice: null,
+                joinerChoice: null,
+                status: "waiting",
+                gameType: "rps",
+                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                expiryTime: Date.now() + (30 * 60 * 1000), // 30 minutes expiry
+                createdBy: tgApp.initDataUnsafe && tgApp.initDataUnsafe.user ? tgApp.initDataUnsafe.user.id : null,
+                creatorName: gameState.playerName
+            }).then(() => {
+                debug(`RPS game created with ID: ${gameId}`);
+                rpsGameIdInputElement.value = gameId;
+                rpsGameIdDisplayElement.textContent = gameId;
+                rpsGameIdDisplayElement.classList.add("visible");
+                
+                // Listen for game updates
+                listenToRpsGameUpdates(gameId);
+                
+                // Share game ID with Telegram
+                if (tgApp.initDataUnsafe && tgApp.initDataUnsafe.user) {
+                    tgApp.sendData(JSON.stringify({
+                        type: "share_game",
+                        game_id: gameId,
+                        game_type: "rps"
+                    }));
+                }
+                
+                showSuccess(`Game created! ID: ${gameId}`);
+            }).catch(error => {
+                debug(`Error creating RPS game: ${error.message}`);
+                showError("Failed to create game. Please try again.");
+            });
+        }
+
+        function joinRpsGame(gameId) {
+            if (!gameId || gameId.length !== 6) {
+                showError("Please enter a valid Game ID (6 characters)");
+                return;
+            }
+            
+            debug(`Joining RPS game with ID: ${gameId}`);
+            rpsGameState.gameId = gameId;
+            
+            // Check if game exists
+            const gameRef = db.ref(`rps_games/${gameId}`);
+            gameRef.once("value").then(snapshot => {
+                const gameData = snapshot.val();
+                
+                if (!gameData) {
+                    showError("Game not found. Please check the Game ID.");
+                    return;
+                }
+                
+                if (gameData.status === "expired") {
+                    showError("This game has expired. Please create a new game.");
+                    return;
+                }
+                
+                // Join the game
+                rpsGameState.status = gameData.status === "waiting" ? "playing" : gameData.status;
+                
+                // Update game status in Firebase
+                gameRef.update({
+                    status: "playing",
+                    joinedBy: tgApp.initDataUnsafe && tgApp.initDataUnsafe.user ? tgApp.initDataUnsafe.user.id : null,
+                    joinerName: gameState.playerName
+                }).then(() => {
+                    rpsGameIdDisplayElement.textContent = gameId;
+                    rpsGameIdDisplayElement.classList.add("visible");
+                    
+                    // Listen for game updates
+                    listenToRpsGameUpdates(gameId);
+                    
+                    rpsStatusElement.textContent = "Choose your move";
+                    showSuccess("Joined game successfully!");
+                }).catch(error => {
+                    debug(`Error joining RPS game: ${error.message}`);
+                    showError("Failed to join game. Please try again.");
+                });
+            }).catch(error => {
+                debug(`Error joining RPS game: ${error.message}`);
+                showError("Failed to join game. Please try again.");
+            });
+        }
+
+        function listenToRpsGameUpdates(gameId) {
+            const gameRef = db.ref(`rps_games/${gameId}`);
+            
+            // Remove any existing listeners
+            gameRef.off();
+            
+            // Listen for changes
+            gameRef.on("value", snapshot => {
+                const gameData = snapshot.val();
+                
+                if (!gameData) {
+                    showError("Game no longer exists.");
+                    return;
+                }
+                
+                if (gameData.status === "expired") {
+                    rpsGameState.status = "expired";
+                    showError("This game has expired.");
+                    return;
+                }
+                
+                // Check if both players have made choices
+                if (gameData.creatorChoice && gameData.joinerChoice) {
+                    // Determine if current user is creator or joiner
+                    const isCreator = tgApp.initDataUnsafe && tgApp.initDataUnsafe.user && 
+                                     gameData.createdBy === tgApp.initDataUnsafe.user.id;
+                    
+                    if (isCreator) {
+                        updateRpsPlayerChoice(gameData.creatorChoice);
+                        updateRpsOpponentChoice(gameData.joinerChoice);
+                        determineRpsWinner(gameData.creatorChoice, gameData.joinerChoice);
+                    } else {
+                        updateRpsPlayerChoice(gameData.joinerChoice);
+                        updateRpsOpponentChoice(gameData.creatorChoice);
+                        determineRpsWinner(gameData.joinerChoice, gameData.creatorChoice);
+                    }
+                } else if (gameData.creatorChoice || gameData.joinerChoice) {
+                    // Only one player has made a choice
+                    const isCreator = tgApp.initDataUnsafe && tgApp.initDataUnsafe.user && 
+                                     gameData.createdBy === tgApp.initDataUnsafe.user.id;
+                    
+                    if (isCreator && gameData.creatorChoice) {
+                        updateRpsPlayerChoice(gameData.creatorChoice);
+                        rpsStatusElement.textContent = "Waiting for opponent...";
+                    } else if (!isCreator && gameData.joinerChoice) {
+                        updateRpsPlayerChoice(gameData.joinerChoice);
+                        rpsStatusElement.textContent = "Waiting for opponent...";
+                    } else {
+                        rpsStatusElement.textContent = "Opponent has made their choice. Your turn!";
+                    }
+                }
+            });
+        }
+
+        function shareRpsGame() {
+            if (rpsGameState.gameMode === "friend" && rpsGameState.gameId) {
+                // Share game ID with Telegram
+                if (tgApp.initDataUnsafe && tgApp.initDataUnsafe.user) {
+                    tgApp.sendData(JSON.stringify({
+                        type: "share_game",
+                        game_id: rpsGameState.gameId,
+                        game_type: "rps"
+                    }));
+                } else {
+                    // Fallback for testing in browser
+                    const shareUrl = `${window.location.origin}${window.location.pathname}?gameId=${rpsGameState.gameId}&gameType=rps`;
+                    navigator.clipboard.writeText(shareUrl)
+                        .then(() => showSuccess("Game link copied to clipboard!"))
+                        .catch(() => showError("Failed to copy game link."));
+                }
+            } else {
+                showError("Create a multiplayer game first!");
+            }
+        }
+
+        function updateLeaderboard(gameType) {
             // Update leaderboard in Telegram
             if (tgApp.initDataUnsafe && tgApp.initDataUnsafe.user) {
                 tgApp.sendData(JSON.stringify({
-                    type: "update_leaderboard"
+                    type: "update_leaderboard",
+                    game_type: gameType
                 }));
-                debug("Sent leaderboard update to Telegram");
+                debug(`Sent ${gameType} leaderboard update to Telegram`);
             }
         }
 
@@ -1838,13 +3191,17 @@
                 wins: gameState.playerStats.wins,
                 games: gameState.playerStats.games,
                 winRate: gameState.playerStats.winRate,
+                tttWins: gameState.playerStats.tttWins,
+                tttGames: gameState.playerStats.tttGames,
+                rpsWins: gameState.playerStats.rpsWins,
+                rpsGames: gameState.playerStats.rpsGames,
                 lastPlayed: firebase.database.ServerValue.TIMESTAMP
             }).catch(error => {
                 debug(`Error updating player stats: ${error.message}`);
             });
         }
 
-        function addGameToHistory(result) {
+        function addGameToHistory(result, gameType) {
             if (!tgApp.initDataUnsafe || !tgApp.initDataUnsafe.user) return;
             
             const userId = tgApp.initDataUnsafe.user.id;
@@ -1852,9 +3209,14 @@
             
             historyRef.set({
                 result: result,
-                mode: gameState.gameMode,
-                difficulty: gameState.gameMode === "ai" ? gameState.difficulty : null,
-                opponent: gameState.gameMode === "friend" ? "Friend" : "AI",
+                gameType: gameType,
+                mode: gameType === "ttt" ? gameState.gameMode : rpsGameState.gameMode,
+                difficulty: gameType === "ttt" ? 
+                    (gameState.gameMode === "ai" ? gameState.difficulty : null) : 
+                    (rpsGameState.gameMode === "ai" ? rpsGameState.difficulty : null),
+                opponent: gameType === "ttt" ? 
+                    (gameState.gameMode === "friend" ? "Friend" : "AI") : 
+                    (rpsGameState.gameMode === "friend" ? "Friend" : "AI"),
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             }).then(() => {
                 // Reload history
@@ -1865,12 +3227,13 @@
         }
 
         function loadLeaderboard() {
-            const leaderboardRef = db.ref("users");
-            leaderboardRef.orderByChild("wins").limitToLast(10).once("value").then(snapshot => {
-                leaderboardLoadingElement.style.display = "none";
+            // Load All Leaderboard
+            const allLeaderboardRef = db.ref("users");
+            allLeaderboardRef.orderByChild("wins").limitToLast(10).once("value").then(snapshot => {
+                allLeaderboardLoadingElement.style.display = "none";
                 
                 if (!snapshot.exists()) {
-                    leaderboardListElement.innerHTML = "<li class='leaderboard-item'>No data yet</li>";
+                    allLeaderboardListElement.innerHTML = "<li class='leaderboard-item'>No data yet</li>";
                     return;
                 }
                 
@@ -1886,7 +3249,7 @@
                 leaderboardData.sort((a, b) => b.wins - a.wins);
                 
                 // Render leaderboard
-                leaderboardListElement.innerHTML = "";
+                allLeaderboardListElement.innerHTML = "";
                 leaderboardData.forEach((player, index) => {
                     const listItem = document.createElement("li");
                     listItem.className = "leaderboard-item";
@@ -1902,19 +3265,119 @@
                         </div>
                         <span class="player-wins">${player.wins} wins</span>
                     `;
-                    leaderboardListElement.appendChild(listItem);
+                    allLeaderboardListElement.appendChild(listItem);
                 });
             }).catch(error => {
-                debug(`Error loading leaderboard: ${error.message}`);
-                leaderboardLoadingElement.style.display = "none";
-                leaderboardListElement.innerHTML = "<li class='leaderboard-item'>Failed to load leaderboard</li>";
+                debug(`Error loading all leaderboard: ${error.message}`);
+                allLeaderboardLoadingElement.style.display = "none";
+                allLeaderboardListElement.innerHTML = "<li class='leaderboard-item'>Failed to load leaderboard</li>";
+            });
+            
+            // Load TTT Leaderboard
+            const tttLeaderboardRef = db.ref("users");
+            tttLeaderboardRef.orderByChild("tttWins").limitToLast(10).once("value").then(snapshot => {
+                tttLeaderboardLoadingElement.style.display = "none";
+                
+                if (!snapshot.exists()) {
+                    tttLeaderboardListElement.innerHTML = "<li class='leaderboard-item'>No data yet</li>";
+                    return;
+                }
+                
+                const leaderboardData = [];
+                snapshot.forEach(childSnapshot => {
+                    const userData = childSnapshot.val();
+                    if (userData.tttWins && userData.tttWins > 0) {
+                        leaderboardData.push({
+                            id: childSnapshot.key,
+                            ...userData
+                        });
+                    }
+                });
+                
+                // Sort by TTT wins (descending)
+                leaderboardData.sort((a, b) => b.tttWins - a.tttWins);
+                
+                // Render leaderboard
+                tttLeaderboardListElement.innerHTML = "";
+                leaderboardData.forEach((player, index) => {
+                    const listItem = document.createElement("li");
+                    listItem.className = "leaderboard-item";
+                    
+                    const rankClass = index < 3 ? "top-rank" : "";
+                    const initial = player.name ? player.name.charAt(0).toUpperCase() : "?";
+                    
+                    listItem.innerHTML = `
+                        <span class="player-rank ${rankClass}">${index + 1}</span>
+                        <div class="player-info">
+                            <div class="player-avatar">${initial}</div>
+                            <span class="player-name">${player.name || "Unknown"}</span>
+                        </div>
+                        <span class="player-wins">${player.tttWins} wins</span>
+                    `;
+                    tttLeaderboardListElement.appendChild(listItem);
+                });
+            }).catch(error => {
+                debug(`Error loading TTT leaderboard: ${error.message}`);
+                tttLeaderboardLoadingElement.style.display = "none";
+                tttLeaderboardListElement.innerHTML = "<li class='leaderboard-item'>Failed to load leaderboard</li>";
+            });
+            
+            // Load RPS Leaderboard
+            const rpsLeaderboardRef = db.ref("users");
+            rpsLeaderboardRef.orderByChild("rpsWins").limitToLast(10).once("value").then(snapshot => {
+                rpsLeaderboardLoadingElement.style.display = "none";
+                
+                if (!snapshot.exists()) {
+                    rpsLeaderboardListElement.innerHTML = "<li class='leaderboard-item'>No data yet</li>";
+                    return;
+                }
+                
+                const leaderboardData = [];
+                snapshot.forEach(childSnapshot => {
+                    const userData = childSnapshot.val();
+                    if (userData.rpsWins && userData.rpsWins > 0) {
+                        leaderboardData.push({
+                            id: childSnapshot.key,
+                            ...userData
+                        });
+                    }
+                });
+                
+                // Sort by RPS wins (descending)
+                leaderboardData.sort((a, b) => b.rpsWins - a.rpsWins);
+                
+                // Render leaderboard
+                rpsLeaderboardListElement.innerHTML = "";
+                leaderboardData.forEach((player, index) => {
+                    const listItem = document.createElement("li");
+                    listItem.className = "leaderboard-item";
+                    
+                    const rankClass = index < 3 ? "top-rank" : "";
+                    const initial = player.name ? player.name.charAt(0).toUpperCase() : "?";
+                    
+                    listItem.innerHTML = `
+                        <span class="player-rank ${rankClass}">${index + 1}</span>
+                        <div class="player-info">
+                            <div class="player-avatar">${initial}</div>
+                            <span class="player-name">${player.name || "Unknown"}</span>
+                        </div>
+                        <span class="player-wins">${player.rpsWins} wins</span>
+                    `;
+                    rpsLeaderboardListElement.appendChild(listItem);
+                });
+            }).catch(error => {
+                debug(`Error loading RPS leaderboard: ${error.message}`);
+                rpsLeaderboardLoadingElement.style.display = "none";
+                rpsLeaderboardListElement.innerHTML = "<li class='leaderboard-item'>Failed to load leaderboard</li>";
             });
         }
 
         function loadGameHistory() {
             if (!tgApp.initDataUnsafe || !tgApp.initDataUnsafe.user) {
-                historyLoadingElement.style.display = "none";
-                historyListElement.innerHTML = "<li class='history-item'>Sign in to view history</li>";
+                dashboardHistoryLoadingElement.style.display = "none";
+                dashboardHistoryListElement.innerHTML = "<li class='history-item'>Sign in to view history</li>";
+                profileHistoryLoadingElement.style.display = "none";
+                profileHistoryListElement.innerHTML = "<li class='history-item'>Sign in to view history</li>";
                 return;
             }
             
@@ -1922,10 +3385,12 @@
             const historyRef = db.ref(`users/${userId}/history`).limitToLast(10);
             
             historyRef.once("value").then(snapshot => {
-                historyLoadingElement.style.display = "none";
+                dashboardHistoryLoadingElement.style.display = "none";
+                profileHistoryLoadingElement.style.display = "none";
                 
                 if (!snapshot.exists()) {
-                    historyListElement.innerHTML = "<li class='history-item'>No games played yet</li>";
+                    dashboardHistoryListElement.innerHTML = "<li class='history-item'>No games played yet</li>";
+                    profileHistoryListElement.innerHTML = "<li class='history-item'>No games played yet</li>";
                     return;
                 }
                 
@@ -1940,11 +3405,18 @@
                 // Sort by timestamp (descending)
                 historyData.sort((a, b) => b.timestamp - a.timestamp);
                 
-                // Render history
-                historyListElement.innerHTML = "";
+                // Render history for dashboard
+                dashboardHistoryListElement.innerHTML = "";
+                profileHistoryListElement.innerHTML = "";
+                
                 historyData.forEach(game => {
-                    const listItem = document.createElement("li");
-                    listItem.className = "history-item";
+                    // Create dashboard history item
+                    const dashboardListItem = document.createElement("li");
+                    dashboardListItem.className = "history-item";
+                    
+                    // Create profile history item
+                    const profileListItem = document.createElement("li");
+                    profileListItem.className = "history-item";
                     
                     const date = new Date(game.timestamp);
                     const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
@@ -1963,23 +3435,195 @@
                         resultText = "Draw";
                     }
                     
-                    listItem.innerHTML = `
+                    const gameTypeIcon = game.gameType === "ttt" ? 
+                        '<i class="fas fa-th"></i>' : 
+                        '<i class="fas fa-hand-rock"></i>';
+                    
+                    const gameTypeText = game.gameType === "ttt" ? "TicTacToe" : "Rock Paper Scissors";
+                    
+                    dashboardListItem.innerHTML = `
                         <div class="history-header">
                             <span class="history-date">${formattedDate}</span>
                             <span class="history-result ${resultClass}">${resultText}</span>
                         </div>
                         <div class="history-details">
-                            <span class="history-mode">${game.mode === "ai" ? "AI" : "Multiplayer"}</span>
+                            <span class="history-mode">${gameTypeIcon} ${gameTypeText}</span>
                             <span class="history-opponent">vs ${game.opponent} ${game.difficulty ? `(${game.difficulty})` : ""}</span>
                         </div>
                     `;
-                    historyListElement.appendChild(listItem);
+                    
+                    profileListItem.innerHTML = dashboardListItem.innerHTML;
+                    
+                    dashboardHistoryListElement.appendChild(dashboardListItem);
+                    profileHistoryListElement.appendChild(profileListItem);
                 });
             }).catch(error => {
                 debug(`Error loading game history: ${error.message}`);
-                historyLoadingElement.style.display = "none";
-                historyListElement.innerHTML = "<li class='history-item'>Failed to load game history</li>";
+                dashboardHistoryLoadingElement.style.display = "none";
+                profileHistoryLoadingElement.style.display = "none";
+                dashboardHistoryListElement.innerHTML = "<li class='history-item'>Failed to load game history</li>";
+                profileHistoryListElement.innerHTML = "<li class='history-item'>Failed to load game history</li>";
             });
+        }
+
+        function loadNotifications() {
+            notificationsLoadingElement.style.display = "none";
+            
+            if (!tgApp.initDataUnsafe || !tgApp.initDataUnsafe.user) {
+                notificationsListElement.innerHTML = "<div class='history-item'>Sign in to view notifications</div>";
+                return;
+            }
+            
+            const userId = tgApp.initDataUnsafe.user.id;
+            const notificationsRef = db.ref(`users/${userId}/notifications`).limitToLast(20);
+            
+            notificationsRef.once("value").then(snapshot => {
+                if (!snapshot.exists()) {
+                    notificationsListElement.innerHTML = "<div class='notification-item'><div class='notification-content'><div class='notification-message'>No notifications yet</div></div></div>";
+                    return;
+                }
+                
+                const notificationsData = [];
+                snapshot.forEach(childSnapshot => {
+                    notificationsData.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+                
+                // Sort by timestamp (descending)
+                notificationsData.sort((a, b) => b.timestamp - a.timestamp);
+                
+                // Render notifications
+                notificationsListElement.innerHTML = "";
+                
+                notificationsData.forEach(notification => {
+                    const notificationItem = document.createElement("div");
+                    notificationItem.className = "notification-item";
+                    
+                    const date = new Date(notification.timestamp);
+                    const formattedDate = date.toLocaleDateString() + " " + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    
+                    let iconClass = "fas fa-bell";
+                    
+                    if (notification.type === "game_invite") {
+                        iconClass = "fas fa-gamepad";
+                    } else if (notification.type === "achievement") {
+                        iconClass = "fas fa-trophy";
+                    } else if (notification.type === "system") {
+                        iconClass = "fas fa-info-circle";
+                    }
+                    
+                    let actionsHtml = '';
+                    
+                    if (notification.actions) {
+                        actionsHtml = '<div class="notification-actions">';
+                        
+                        if (notification.actions.primary) {
+                            actionsHtml += `<button class="notification-btn primary" data-action="${notification.actions.primary.action}" data-notification-id="${notification.id}">${notification.actions.primary.text}</button>`;
+                        }
+                        
+                        if (notification.actions.secondary) {
+                            actionsHtml += `<button class="notification-btn secondary" data-action="${notification.actions.secondary.action}" data-notification-id="${notification.id}">${notification.actions.secondary.text}</button>`;
+                        }
+                        
+                        actionsHtml += '</div>';
+                    }
+                    
+                    notificationItem.innerHTML = `
+                        <div class="notification-icon">
+                            <i class="${iconClass}"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">${notification.title || 'Notification'}</div>
+                            <div class="notification-message">${notification.message}</div>
+                            <div class="notification-time">${formattedDate}</div>
+                            ${actionsHtml}
+                        </div>
+                    `;
+                    
+                    notificationsListElement.appendChild(notificationItem);
+                });
+                
+                // Add event listeners for notification actions
+                document.querySelectorAll('.notification-btn').forEach(button => {
+                    button.addEventListener('click', handleNotificationAction);
+                });
+            }).catch(error => {
+                debug(`Error loading notifications: ${error.message}`);
+                notificationsLoadingElement.style.display = "none";
+                notificationsListElement.innerHTML = "<div class='notification-item'><div class='notification-content'><div class='notification-message'>Failed to load notifications</div></div></div>";
+            });
+        }
+
+        function handleNotificationAction(event) {
+            const action = event.target.dataset.action;
+            const notificationId = event.target.dataset.notificationId;
+            
+            if (!action || !notificationId) return;
+            
+            debug(`Notification action: ${action}, ID: ${notificationId}`);
+            
+            if (action === 'dismiss') {
+                // Remove notification
+                if (tgApp.initDataUnsafe && tgApp.initDataUnsafe.user) {
+                    const userId = tgApp.initDataUnsafe.user.id;
+                    const notificationRef = db.ref(`users/${userId}/notifications/${notificationId}`);
+                    
+                    notificationRef.remove()
+                        .then(() => {
+                            // Remove from UI
+                            const notificationItem = event.target.closest('.notification-item');
+                            if (notificationItem) {
+                                notificationItem.remove();
+                            }
+                            
+                            showSuccess("Notification dismissed");
+                        })
+                        .catch(error => {
+                            debug(`Error dismissing notification: ${error.message}`);
+                            showError("Failed to dismiss notification");
+                        });
+                }
+            } else if (action === 'join_game') {
+                // Get game details from notification
+                if (tgApp.initDataUnsafe && tgApp.initDataUnsafe.user) {
+                    const userId = tgApp.initDataUnsafe.user.id;
+                    const notificationRef = db.ref(`users/${userId}/notifications/${notificationId}`);
+                    
+                    notificationRef.once('value')
+                        .then(snapshot => {
+                            const notification = snapshot.val();
+                            
+                            if (notification && notification.data) {
+                                const gameId = notification.data.gameId;
+                                const gameType = notification.data.gameType;
+                                
+                                if (gameId) {
+                                    if (gameType === 'rps') {
+                                        // Join RPS game
+                                        switchSection('rpsGameSection');
+                                        rpsGameState.gameMode = "friend";
+                                        rpsGameState.gameId = gameId;
+                                        updateRpsGameModeUI();
+                                        joinRpsGame(gameId);
+                                    } else {
+                                        // Default to TicTacToe
+                                        switchSection('tttGameSection');
+                                        gameState.gameMode = "friend";
+                                        gameState.gameId = gameId;
+                                        updateGameModeUI();
+                                        joinGame(gameId);
+                                    }
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            debug(`Error getting notification details: ${error.message}`);
+                            showError("Failed to join game");
+                        });
+                }
+            }
         }
 
         function showConfetti() {
