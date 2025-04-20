@@ -3231,32 +3231,42 @@
             const allLeaderboardRef = db.ref("users");
             allLeaderboardRef.orderByChild("wins").limitToLast(10).once("value").then(snapshot => {
                 allLeaderboardLoadingElement.style.display = "none";
-                
+    
                 if (!snapshot.exists()) {
                     allLeaderboardListElement.innerHTML = "<li class='leaderboard-item'>No data yet</li>";
                     return;
                 }
-                
+    
                 const leaderboardData = [];
                 snapshot.forEach(childSnapshot => {
-                    leaderboardData.push({
-                        id: childSnapshot.key,
-                        ...childSnapshot.val()
-                    });
+                    const userData = childSnapshot.val();
+                    // Only include users who have wins greater than 0
+                    if (userData.wins && userData.wins > 0) {
+                        leaderboardData.push({
+                            id: childSnapshot.key,
+                            ...userData
+                        });
+                    }
                 });
-                
+    
+                // Check if we have any valid entries
+                if (leaderboardData.length === 0) {
+                    allLeaderboardListElement.innerHTML = "<li class='leaderboard-item'>No leaderboard data yet</li>";
+                    return;
+                }
+    
                 // Sort by wins (descending)
                 leaderboardData.sort((a, b) => b.wins - a.wins);
-                
+    
                 // Render leaderboard
                 allLeaderboardListElement.innerHTML = "";
                 leaderboardData.forEach((player, index) => {
                     const listItem = document.createElement("li");
                     listItem.className = "leaderboard-item";
-                    
+    
                     const rankClass = index < 3 ? "top-rank" : "";
                     const initial = player.name ? player.name.charAt(0).toUpperCase() : "?";
-                    
+    
                     listItem.innerHTML = `
                         <span class="player-rank ${rankClass}">${index + 1}</span>
                         <div class="player-info">
@@ -3272,20 +3282,21 @@
                 allLeaderboardLoadingElement.style.display = "none";
                 allLeaderboardListElement.innerHTML = "<li class='leaderboard-item'>Failed to load leaderboard</li>";
             });
-            
+
             // Load TTT Leaderboard
             const tttLeaderboardRef = db.ref("users");
             tttLeaderboardRef.orderByChild("tttWins").limitToLast(10).once("value").then(snapshot => {
                 tttLeaderboardLoadingElement.style.display = "none";
-                
+    
                 if (!snapshot.exists()) {
                     tttLeaderboardListElement.innerHTML = "<li class='leaderboard-item'>No data yet</li>";
                     return;
                 }
-                
+    
                 const leaderboardData = [];
                 snapshot.forEach(childSnapshot => {
                     const userData = childSnapshot.val();
+                    // Only include users who have tttWins greater than 0
                     if (userData.tttWins && userData.tttWins > 0) {
                         leaderboardData.push({
                             id: childSnapshot.key,
@@ -3293,19 +3304,25 @@
                         });
                     }
                 });
-                
+    
+                // Check if we have any valid entries
+                if (leaderboardData.length === 0) {
+                    tttLeaderboardListElement.innerHTML = "<li class='leaderboard-item'>No leaderboard data yet</li>";
+                    return;
+                }
+    
                 // Sort by TTT wins (descending)
                 leaderboardData.sort((a, b) => b.tttWins - a.tttWins);
-                
+    
                 // Render leaderboard
                 tttLeaderboardListElement.innerHTML = "";
                 leaderboardData.forEach((player, index) => {
                     const listItem = document.createElement("li");
                     listItem.className = "leaderboard-item";
-                    
+    
                     const rankClass = index < 3 ? "top-rank" : "";
                     const initial = player.name ? player.name.charAt(0).toUpperCase() : "?";
-                    
+    
                     listItem.innerHTML = `
                         <span class="player-rank ${rankClass}">${index + 1}</span>
                         <div class="player-info">
@@ -3321,20 +3338,21 @@
                 tttLeaderboardLoadingElement.style.display = "none";
                 tttLeaderboardListElement.innerHTML = "<li class='leaderboard-item'>Failed to load leaderboard</li>";
             });
-            
+
             // Load RPS Leaderboard
             const rpsLeaderboardRef = db.ref("users");
             rpsLeaderboardRef.orderByChild("rpsWins").limitToLast(10).once("value").then(snapshot => {
                 rpsLeaderboardLoadingElement.style.display = "none";
-                
+    
                 if (!snapshot.exists()) {
                     rpsLeaderboardListElement.innerHTML = "<li class='leaderboard-item'>No data yet</li>";
                     return;
                 }
-                
+    
                 const leaderboardData = [];
                 snapshot.forEach(childSnapshot => {
                     const userData = childSnapshot.val();
+                    // Only include users who have rpsWins greater than 0
                     if (userData.rpsWins && userData.rpsWins > 0) {
                         leaderboardData.push({
                             id: childSnapshot.key,
@@ -3342,19 +3360,25 @@
                         });
                     }
                 });
-                
+    
+                // Check if we have any valid entries
+                if (leaderboardData.length === 0) {
+                    rpsLeaderboardListElement.innerHTML = "<li class='leaderboard-item'>No leaderboard data yet</li>";
+                    return;
+                }
+    
                 // Sort by RPS wins (descending)
                 leaderboardData.sort((a, b) => b.rpsWins - a.rpsWins);
-                
+    
                 // Render leaderboard
                 rpsLeaderboardListElement.innerHTML = "";
                 leaderboardData.forEach((player, index) => {
                     const listItem = document.createElement("li");
                     listItem.className = "leaderboard-item";
-                    
+    
                     const rankClass = index < 3 ? "top-rank" : "";
                     const initial = player.name ? player.name.charAt(0).toUpperCase() : "?";
-                    
+    
                     listItem.innerHTML = `
                         <span class="player-rank ${rankClass}">${index + 1}</span>
                         <div class="player-info">
