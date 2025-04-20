@@ -1293,90 +1293,540 @@
                 font-size: 36px;
             }
         }
+
+        /* Dashboard Styles */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary-color), #2678b6);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            color: white;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+        }
+
+        .welcome-content h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .welcome-content p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .welcome-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .welcome-btn {
+            padding: 12px 24px;
+            background-color: white;
+            color: var(--primary-color);
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        .welcome-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-btn.secondary {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--tg-theme-text-color, #000000);
+        }
+
+        .games-showcase {
+            margin-bottom: 24px;
+        }
+
+        .game-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .game-showcase-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            position: relative;
+            overflow: hidden;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .game-showcase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-number {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+        }
+
+        .game-showcase-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .game-showcase-content {
+            flex: 1;
+        }
+
+        .game-showcase-content h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .game-showcase-content p {
+            color: var(--tg-theme-hint-color, #999999);
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .game-showcase-btn {
+            padding: 8px 16px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .game-showcase-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .features-section {
+            margin-bottom: 24px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .feature-content {
+            flex: 1;
+        }
+
+        .feature-content h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-content p {
+            color: var(--tg-theme-hint-color, #999999);
+            font-size: 14px;
+        }
+
+        .how-to-play-section {
+            margin-bottom: 24px;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .step-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .step-content p {
+            color: var(--tg-theme-hint-color, #999999);
+            font-size: 14px;
+        }
+
+        .pro-tip-section {
+            background-color: #FFF8E1;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-left: 4px solid #FFC107;
+        }
+
+        .pro-tip-icon {
+            width: 50px;
+            height: 50px;
+            background-color: #FFC107;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .pro-tip-content h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #F57C00;
+        }
+
+        .pro-tip-content p {
+            font-size: 16px;
+            color: #5D4037;
+        }
+
+        .profile-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .recent-activity-section {
+            margin-bottom: 24px;
+        }
+
+        /* Dark mode adjustments */
+        @media (prefers-color-scheme: dark) {
+            .game-showcase-card,
+            .feature-card,
+            .step-card,
+            .profile-card {
+                background-color: #333;
+            }
+
+            .pro-tip-section {
+                background-color: #3E2723;
+                border-left: 4px solid #FFC107;
+            }
+
+            .pro-tip-content h4 {
+                color: #FFC107;
+            }
+
+            .pro-tip-content p {
+                color: #E0E0E0;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .welcome-content h2 {
+                font-size: 20px;
+            }
+
+            .welcome-content p {
+                font-size: 14px;
+            }
+
+            .welcome-btn {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .features-grid,
+            .steps-container {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container" id="mainContainer">
         <!-- Dashboard Section -->
         <div id="dashboardSection" class="section-container visible">
-            <div class="header">
-                <h1>Game Hub Pro</h1>
-                <div class="badge">OFFICIAL</div>
-                <div class="version">v2.0.0</div>
+    <div class="header">
+        <h1>Game Hub Pro</h1>
+        <div class="badge">OFFICIAL</div>
+        <div class="version">v2.0.0</div>
+    </div>
+
+    <div class="error-message" id="errorMessage"></div>
+    <div class="success-message" id="successMessage"></div>
+
+    <!-- Welcome Banner -->
+    <div class="welcome-banner">
+        <div class="welcome-content">
+            <h2>Welcome to Game Hub Pro!</h2>
+            <p>Play classic games, challenge friends, and climb the leaderboard!</p>
+            <div class="welcome-buttons">
+                <button class="welcome-btn" id="playNowBtn">
+                    <i class="fas fa-gamepad"></i> Play Now
+                </button>
+                <a href="https://t.me/AbroTemTechnologies" class="welcome-btn secondary" target="_blank">
+                    <i class="fas fa-bullhorn"></i> Join Official Channel
+                </a>
             </div>
+        </div>
+    </div>
 
-            <div class="error-message" id="errorMessage"></div>
-            <div class="success-message" id="successMessage"></div>
-
-            <div class="profile-section" id="profileSection">
-                <div class="profile-avatar" id="profileAvatar">
-                    <i class="fas fa-user"></i>
+    <!-- Games Showcase -->
+    <div class="games-showcase">
+        <h3 class="section-title"><i class="fas fa-gamepad"></i> Our Games</h3>
+        
+        <div class="game-cards">
+            <div class="game-showcase-card" id="tttShowcaseCard">
+                <div class="game-number">1️⃣</div>
+                <div class="game-showcase-icon">
+                    <i class="fas fa-th"></i>
                 </div>
-                <div class="profile-info">
-                    <div class="profile-name" id="profileName">Player</div>
-                    <div class="profile-stats">
-                        <div class="stat">
-                            <i class="fas fa-trophy"></i>
-                            <span class="stat-value" id="statWins">0</span> Wins
-                        </div>
-                        <div class="stat">
-                            <i class="fas fa-gamepad"></i>
-                            <span class="stat-value" id="statGames">0</span> Games
-                        </div>
-                        <div class="stat">
-                            <i class="fas fa-percentage"></i>
-                            <span class="stat-value" id="statWinRate">0%</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tabs">
-                <div class="tab active" id="recentGamesTab" role="tab" aria-selected="true" tabindex="0">
-                    <i class="fas fa-clock"></i> Recent Games
-                </div>
-                <div class="tab" id="statsTab" role="tab" aria-selected="false" tabindex="0">
-                    <i class="fas fa-chart-bar"></i> Stats
-                </div>
-            </div>
-
-            <div class="tab-content active" id="recentGamesContent" role="tabpanel" aria-labelledby="recentGamesTab">
-                <div class="history">
-                    <h2><i class="fas fa-history"></i> Recent Activity</h2>
-                    <div id="dashboardHistoryLoading" class="loading">
-                        <div class="spinner"></div>
-                        <p>Loading recent games...</p>
-                    </div>
-                    <ul class="history-list" id="dashboardHistoryList"></ul>
+                <div class="game-showcase-content">
+                    <h4>TIC-TAC-TOE ❌⭕</h4>
+                    <p>Classic game of X's and O's with multiple difficulty levels!</p>
+                    <button class="game-showcase-btn" id="playTTTBtn">
+                        <i class="fas fa-play"></i> Play Now
+                    </button>
                 </div>
             </div>
-
-            <div class="tab-content" id="statsContent" role="tabpanel" aria-labelledby="statsTab">
-                <div class="leaderboard">
-                    <h2><i class="fas fa-chart-line"></i> Your Statistics</h2>
-                    <div class="profile-stats-row">
-                        <div class="profile-stat-item">
-                            <div class="profile-stat-value" id="tttWins">0</div>
-                            <div class="profile-stat-label">TicTacToe Wins</div>
-                        </div>
-                        <div class="profile-stat-item">
-                            <div class="profile-stat-value" id="rpsWins">0</div>
-                            <div class="profile-stat-label">RPS Wins</div>
-                        </div>
-                    </div>
-                    <div class="profile-stats-row">
-                        <div class="profile-stat-item">
-                            <div class="profile-stat-value" id="totalGames">0</div>
-                            <div class="profile-stat-label">Total Games</div>
-                        </div>
-                        <div class="profile-stat-item">
-                            <div class="profile-stat-value" id="overallWinRate">0%</div>
-                            <div class="profile-stat-label">Win Rate</div>
-                        </div>
-                    </div>
+            
+            <div class="game-showcase-card" id="rpsShowcaseCard">
+                <div class="game-number">2️⃣</div>
+                <div class="game-showcase-icon">
+                    <i class="fas fa-hand-rock"></i>
+                </div>
+                <div class="game-showcase-content">
+                    <h4>ROCK-PAPER-SCISSORS ✊✋✌️</h4>
+                    <p>Test your luck and strategy in this classic hand game!</p>
+                    <button class="game-showcase-btn" id="playRPSBtn">
+                        <i class="fas fa-play"></i> Play Now
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+        <h3 class="section-title"><i class="fas fa-star"></i> Features</h3>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="feature-content">
+                    <h4>Play vs AI 🤖</h4>
+                    <p>Challenge our AI with multiple difficulty levels to test your skills!</p>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-user-friends"></i>
+                </div>
+                <div class="feature-content">
+                    <h4>Play with Friends 👥</h4>
+                    <p>Create a game and share the code with friends to play together!</p>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="feature-content">
+                    <h4>Leaderboard 🏆</h4>
+                    <p>Win games to climb the global leaderboard and become #1!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How to Play Section -->
+    <div class="how-to-play-section">
+        <h3 class="section-title"><i class="fas fa-question-circle"></i> How to Play</h3>
+        
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Start the bot</h4>
+                    <p>Use the /start command in Telegram to initialize the bot</p>
+                </div>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Open Web App</h4>
+                    <p>Click on the "Play Games" button in the Telegram bot</p>
+                </div>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Choose a game</h4>
+                    <p>Select Tic-Tac-Toe or Rock-Paper-Scissors from the Games tab</p>
+                </div>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Select mode</h4>
+                    <p>Choose AI mode to play against the bot or Friend mode to play multiplayer</p>
+                </div>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h4>For multiplayer games:</h4>
+                    <p>Click "Create New Game" to get a game code, then share it with your friend</p>
+                </div>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                    <h4>To join a game:</h4>
+                    <p>Enter the 6-character game code and click "Join Game"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pro Tip Section -->
+    <div class="pro-tip-section">
+        <div class="pro-tip-icon">
+            <i class="fas fa-lightbulb"></i>
+        </div>
+        <div class="pro-tip-content">
+            <h4>🔥 Pro Tip:</h4>
+            <p>Play against the AI to dominate the leaderboard! Can you reach #1?</p>
+        </div>
+    </div>
+
+    <!-- No profile section here, it's in the dedicated profile tab -->
+
+    <!-- Recent Activity Section -->
+    <div class="recent-activity-section">
+        <h3 class="section-title"><i class="fas fa-history"></i> Recent Activity</h3>
+        <div id="dashboardHistoryLoading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading recent games...</p>
+        </div>
+        <ul class="history-list" id="dashboardHistoryList"></ul>
+    </div>
+</div>
 
         <!-- Games Section -->
         <div id="gamesSection" class="section-container game-selection">
@@ -3679,6 +4129,20 @@
             ];
             return colors[Math.floor(Math.random() * colors.length)];
         }
+
+        // Dashboard event listeners
+        document.getElementById('playNowBtn').addEventListener('click', () => {
+            switchSection('gamesSection');
+            document.getElementById('gamesSection').classList.add('visible');
+        });
+
+        document.getElementById('playTTTBtn').addEventListener('click', () => {
+            switchSection('tttGameSection');
+        });
+
+        document.getElementById('playRPSBtn').addEventListener('click', () => {
+            switchSection('rpsGameSection');
+        });
 
         // Enable debug mode in development
         if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
