@@ -2095,44 +2095,48 @@
             </div>
         </div>
 
-        <!-- Profile Section -->
-        <!-- Your Profile Section -->
-    <div class="profile-section" id="profileSection">
-        <h3 class="section-title"><i class="fas fa-user"></i> Your Profile</h3>
-        <div class="profile-card">
-            <div class="profile-avatar" id="profileAvatar">
-                <i class="fas fa-user"></i>
+       <!-- Profile Section -->
+        <div id="profileSection" class="section-container profile-container">
+            <div class="header">
+                <h1>Profile</h1>
+                <div class="badge">YOU</div>
+                <div class="version">v2.0.0</div>
             </div>
-            <div class="profile-info">
-                <div class="profile-name" id="profileName">Player</div>
-                <div class="profile-stats">
-                    <div class="stat">
-                        <i class="fas fa-trophy"></i>
-                        <span class="stat-value" id="statWins">0</span> Wins
-                    </div>
-                    <div class="stat">
-                        <i class="fas fa-gamepad"></i>
-                        <span class="stat-value" id="statGames">0</span> Games
-                    </div>
-                    <div class="stat">
-                        <i class="fas fa-percentage"></i>
-                        <span class="stat-value" id="statWinRate">0%</span>
-                    </div>
+
+            <div class="profile-header">
+                <div class="profile-avatar-large" id="profileAvatarLarge">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-username" id="profileUsername">@username</div>
+                <div class="profile-fullname" id="profileFullname">Player Name</div>
+            </div>
+
+            <div class="profile-stats-row">
+                <div class="profile-stat-item">
+                    <div class="profile-stat-value" id="profileTotalWins">0</div>
+                    <div class="profile-stat-label">Wins</div>
+                </div>
+                <div class="profile-stat-item">
+                    <div class="profile-stat-value" id="profileTotalGames">0</div>
+                    <div class="profile-stat-label">Games</div>
+                </div>
+                <div class="profile-stat-item">
+                    <div class="profile-stat-value" id="profileWinRate">0%</div>
+                    <div class="profile-stat-label">Win Rate</div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Recent Activity Section -->
-    <div class="recent-activity-section">
-        <h3 class="section-title"><i class="fas fa-history"></i> Recent Activity</h3>
-        <div id="dashboardHistoryLoading" class="loading">
-            <div class="spinner"></div>
-            <p>Loading recent games...</p>
+            <div class="profile-section-title">
+                <i class="fas fa-history"></i> Recent Games
+            </div>
+
+            <div id="profileHistoryLoading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading game history...</p>
+            </div>
+            <ul class="history-list" id="profileHistoryList"></ul>
         </div>
-        <ul class="history-list" id="dashboardHistoryList"></ul>
     </div>
-</div>
 
     <div class="connection-status" id="connectionStatus">
         <i class="fas fa-circle"></i>
